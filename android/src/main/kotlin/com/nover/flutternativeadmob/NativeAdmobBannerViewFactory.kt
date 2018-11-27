@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -231,7 +230,7 @@ class NativeAdmobBannerViewHoder @JvmOverloads constructor(
     val bgColor: Int
     when (style) {
       BannerStyle.dark -> {
-        bgColor = R.color.cardview_dark_background
+        setBackgroundColor(Color.BLACK)
 
         adHeadline.setTextColor(Color.WHITE)
         adAdvertiser.setTextColor(Color.WHITE)
@@ -240,7 +239,7 @@ class NativeAdmobBannerViewHoder @JvmOverloads constructor(
         adPrice.setTextColor(Color.WHITE)
       }
       BannerStyle.light -> {
-        bgColor = R.color.cardview_light_background
+        setBackgroundColor(Color.WHITE)
 
         adHeadline.setTextColor(Color.BLACK)
         adAdvertiser.setTextColor(Color.BLACK)
@@ -249,8 +248,6 @@ class NativeAdmobBannerViewHoder @JvmOverloads constructor(
         adPrice.setTextColor(Color.BLACK)
       }
     }
-
-    setBackgroundColor(ResourcesCompat.getColor(context.resources, bgColor, null))
   }
 
   private fun updateMediaView() {

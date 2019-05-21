@@ -10,7 +10,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  static const adUnitID = "ca-app-pub-3940256099942544/8135179316";
+ static const adUnitID = "ca-app-pub-3940256099942544/8135179316";
 
   final _nativeAdmob = NativeAdmob();
 

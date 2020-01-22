@@ -6,14 +6,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/ad_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <com.google.android.gms.ads.formats.UnifiedNativeAdView
             android:id="@+id/ad_view"
@@ -34,13 +35,11 @@
                     android:layout_gravity="left"
                     android:textColor="#FFFFFF"
                     android:textSize="12sp"
-                    android:text="Ad"
+                    android:text="@string/ad_label"
                     android:paddingTop="1dp"
                     android:paddingBottom="1dp"
                     android:paddingStart="3dp"
-                    android:paddingEnd="3dp"
-                    android:width="15dp"
-                    android:height="15dp"/>
+                    android:paddingEnd="3dp" />
 
                 <com.google.android.gms.ads.formats.MediaView
                     android:id="@+id/ad_media"

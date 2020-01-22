@@ -133,7 +133,13 @@ class NativeAdmobBannerViewHoder @JvmOverloads constructor(
     val inflater = LayoutInflater.from(context)
     inflater.inflate(R.layout.native_admob_banner_view, this, true)
 
+    // Show indicator
+    val loadingIndicator = findViewById<ProgressBar>(R.id.loading_indicator)
+    loadingIndicator.visibility = View.VISIBLE
+
     adContainer = findViewById(R.id.ad_container)
+    adContainer.visibility = View.GONE
+
     adView = findViewById(R.id.ad_view)
 
     adMedia = adView.findViewById(R.id.ad_media)

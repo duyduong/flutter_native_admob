@@ -35,8 +35,7 @@ class FlutterNativeAdmobPlugin(
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
-    val method = CallMethod.valueOf(call.method)
-    when (method) {
+    when (CallMethod.valueOf(call.method)) {
       CallMethod.initialize -> {
         initialize(call)
         result.success(null)

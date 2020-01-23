@@ -9,7 +9,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 enum class CallMethod {
-  initialize, setStyle
+  setStyle
 }
 
 class FlutterNativeAdmobPlugin(
@@ -35,17 +35,6 @@ class FlutterNativeAdmobPlugin(
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
-    when (CallMethod.valueOf(call.method)) {
-      CallMethod.initialize -> {
-        initialize(call)
-        result.success(null)
-      }
-      else -> result.notImplemented()
-    }
-  }
-
-  private fun initialize(call: MethodCall) {
-    val appId = call.argument<String>("appId")
-    MobileAds.initialize(context, appId)
+    result.notImplemented()
   }
 }

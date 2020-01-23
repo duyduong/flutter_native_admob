@@ -89,8 +89,6 @@ class NativeAdmobBannerView(
         val style = BannerStyle.valueOf(call.argument("style")!!)
         view.style = style
       }
-
-      else -> result.notImplemented()
     }
   }
 }

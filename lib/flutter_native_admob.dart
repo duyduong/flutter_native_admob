@@ -42,20 +42,35 @@ class _NativeAdmobBannerViewState extends State<NativeAdmobBannerView> {
 
   @override
   Widget build(BuildContext context) {
+    final padding = this._padding;
+    final style = widget.style == BannerStyle.dark ? "dark" : "light";
+    final height =
+        (widget.showMedia ? 330.0 : 140.0) + (padding.top + padding.bottom);
+
+    final contentPadding = "${padding.left}," +
+        "${padding.top}," +
+        "${padding.right}," +
+        "${padding.bottom}";
+
     if (defaultTargetPlatform == TargetPlatform.android) {
-      final padding = this._padding;
-      final style = widget.style == BannerStyle.dark ? "dark" : "light";
-      final height =
-          (widget.showMedia ? 330.0 : 140.0) + (padding.top + padding.bottom);
-
-      final contentPadding = "${padding.left}," +
-          "${padding.top}," +
-          "${padding.right}," +
-          "${padding.bottom}";
-
       return Container(
         height: height,
         child: AndroidView(
+          viewType: NativeAdmobBannerView._viewType,
+          onPlatformViewCreated: _onPlatformViewCreated,
+          creationParamsCodec: StandardMessageCodec(),
+          creationParams: {
+            "adUnitID": widget.adUnitID,
+            "style": style,
+            "showMedia": widget.showMedia,
+            "contentPadding": contentPadding,
+          },
+        ),
+      );
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return Container(
+        height: height,
+        child: UiKitView(
           viewType: NativeAdmobBannerView._viewType,
           onPlatformViewCreated: _onPlatformViewCreated,
           creationParamsCodec: StandardMessageCodec(),

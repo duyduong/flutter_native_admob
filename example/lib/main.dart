@@ -9,17 +9,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
- static const adUnitID = "ca-app-pub-3940256099942544/8135179316";
-
-  final _nativeAdmob = NativeAdmob();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _nativeAdmob.initialize(appID: "ca-app-pub-3940256099942544~3347511713");
-  }
+  static const _adUnitID = "ca-app-pub-3940256099942544/8135179316";
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +36,10 @@ class _MyAppState extends State<MyApp> {
               color: Colors.green,
             ),
             NativeAdmobBannerView(
-              adUnitID: adUnitID,
+              adUnitID: _adUnitID,
               style: BannerStyle.dark,
               showMedia: true,
-              contentPadding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+              contentPadding: EdgeInsets.all(10),
             ),
             Container(
               margin: EdgeInsets.only(bottom: 20.0),

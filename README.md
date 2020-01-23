@@ -53,19 +53,24 @@ apply plugin: 'com.google.gms.google-services'
 </manifest>
 ```
 
-### Initialize Admob app ID
+### Setup iOS project
 
-`NativeAdmob` allows you to initialize Admob ID. For example:
+1. Add Admob App ID:
+   **_Important_**: This step is required as of Google Mobile Ads SDK version 7.42.0. Failure to add add this Info.plist entry results in a crash with the message: The Google Mobile Ads SDK was initialized incorrectly.
+   In your app's Info.plist file, add a GADApplicationIdentifier key with a string value of your AdMob app ID. You can find your App ID in the AdMob UI.
+   You can make this change programmatically:
 
-```dart
-final _nativeAdmob = NativeAdmob();
+```xml
+<key>GADApplicationIdentifier</key>
+<string>Your_Admob_App_ID</string>
+```
 
-@override
-void initState() {
-super.initState();
+2. Add embeded view support:
+   In your app's Info.plist file, add this
 
-_nativeAdmob.initialize(appID: "<Your Admob app ID>");
-}
+```xml
+<key>io.flutter.embedded_views_preview</key>
+<true/>
 ```
 
 ### Integrate banner view widget

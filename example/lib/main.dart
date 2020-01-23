@@ -40,6 +40,9 @@ class _MyAppState extends State<MyApp> {
               style: BannerStyle.dark,
               showMedia: true,
               contentPadding: EdgeInsets.all(10),
+              onCreate: (controller) {
+                // controller.setStyle(BannerStyle.light); // Dynamic update style
+              },
             ),
             Container(
               margin: EdgeInsets.only(bottom: 20.0),

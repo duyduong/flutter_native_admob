@@ -11,11 +11,6 @@ For help getting started with Flutter, view our online [documentation](http://fl
 
 ## How it works
 
-The plugin provides:
-
-- `NativeAdmob`: a singleton class that let you to initialize Admob app ID
-- `NativeAdmobBannerView`: a Flutter widget
-
 ### Setup Android project
 
 1. Add the classpath to the [project]/android/build.gradle file.
@@ -103,7 +98,10 @@ return MaterialApp(
           adUnitID: "<Your ad unit ID>",
           style: BannerStyle.dark, // enum dark or light
           showMedia: true, // whether to show media view or not
-          contentPadding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0), // content padding
+          contentPadding: EdgeInsets.all(10), // content padding
+          onCreate: (controller) {
+            controller.setStyle(BannerStyle.light); // Dynamic update style
+          },
         ),
         Container(
           margin: EdgeInsets.only(bottom: 20.0),
@@ -127,7 +125,9 @@ return MaterialApp(
 }
 ```
 
-**_Warning:_**
+If you want to apply margin, just wrap it into a `Container`
+
+**Note:**
 `NativeAdmobBannerView` has a fixed height. Its height is based on content height, content padding (`contentPadding` parameter) and media view (`showMedia` parameter). So you don't need to worry about the widget height.
 
 ## Example

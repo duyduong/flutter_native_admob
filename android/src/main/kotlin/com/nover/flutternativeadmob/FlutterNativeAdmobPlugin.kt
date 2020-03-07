@@ -9,7 +9,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 enum class CallMethod {
-  setStyle
+  setOptions
 }
 
 class FlutterNativeAdmobPlugin(

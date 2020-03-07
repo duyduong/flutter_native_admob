@@ -52,8 +52,10 @@ class NativeAdmobBannerView: NSObject, FlutterPlatformView {
     }
     
     func view() -> UIView {
-        if let styleValue = params["style"] as? String, let style = BannerStyle(rawValue: styleValue) {
-            bannerView.style = style
+        // Parsing options
+        if let data = params["options"] as? [String: Any] {
+            print("======== data", data)
+            bannerView.bannerOptions = parsingOptions(data)
         }
         
         if let paddingValue = params["contentPadding"] as? String {
@@ -67,13 +69,62 @@ class NativeAdmobBannerView: NSObject, FlutterPlatformView {
     private func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let callMethod = CallMethod(rawValue: call.method) else { return result(FlutterMethodNotImplemented) }
         switch callMethod {
-        case .setStyle:
-            guard let value = params["style"] as? String, let style = BannerStyle(rawValue: value) else {
+        case .setOptions:
+            guard let data = params["options"] as? [String: Any] else {
                 return result(nil)
             }
             
-            bannerView.style = style
+            bannerView.bannerOptions = parsingOptions(data)
         }
+    }
+}
+
+private extension NativeAdmobBannerView {
+    
+    func parsingOptions(_ data: [String: Any]) -> BannerOptions {
+        var bannerOptions = BannerOptions()
+        
+        if let backgroundColorString = data["backgroundColor"] as? String {
+            bannerOptions.backgroundColor = .fromHex(backgroundColorString)
+        }
+        
+        if let indicatorColorString = data["indicatorColor"] as? String {
+            bannerOptions.indicatorColor = .fromHex(indicatorColorString)
+        }
+        
+        if let ratingColorString = data["ratingColor"] as? String {
+            bannerOptions.ratingColor = .fromHex(ratingColorString)
+        }
+        
+        if let data = data["adLabelOptions"] as? [String: Any] {
+            bannerOptions.adLabelOptions.update(JSON: data)
+        }
+        
+        if let data = data["headlineTextOptions"] as? [String: Any] {
+            bannerOptions.headlineTextOptions.update(JSON: data)
+        }
+        
+        if let data = data["advertiserTextOptions"] as? [String: Any] {
+            bannerOptions.advertiserTextOptions.update(JSON: data)
+        }
+        
+        if let data = data["bodyTextOptions"] as? [String: Any] {
+            bannerOptions.bodyTextOptions.update(JSON: data)
+        }
+        
+        if let data = data["storeTextOptions"] as? [String: Any] {
+            bannerOptions.storeTextOptions.update(JSON: data)
+        }
+        
+        if let data = data["priceTextOptions"] as? [String: Any] {
+            bannerOptions.priceTextOptions.update(JSON: data)
+        }
+        
+        if let data = data["callToActionOptions"] as? [String: Any] {
+            bannerOptions.callToActionOptions.update(JSON: data)
+        }
+        
+        return bannerOptions
     }
 }
 

@@ -8,13 +8,93 @@ typedef NativeAdmobBannerViewCreatedCallback = void Function(
   NativeAdController controller,
 );
 
-enum BannerStyle { dark, light }
+class TextOptions {
+  final double fontSize;
+  final Color color;
+  final Color backgroundColor;
+
+  const TextOptions({
+    this.fontSize,
+    this.color,
+    this.backgroundColor,
+  });
+
+  Map<String, dynamic> toJson() => {
+        "backgroundColor": backgroundColor != null
+            ? "#${backgroundColor.value.toRadixString(16)}"
+            : null,
+        "fontSize": fontSize,
+        "color": "#${color.value.toRadixString(16)}",
+      };
+}
+
+class BannerOptions {
+  final Color backgroundColor;
+  final Color indicatorColor;
+  final Color ratingColor;
+  final TextOptions adLabelOptions;
+  final TextOptions headlineTextOptions;
+  final TextOptions advertiserTextOptions;
+  final TextOptions bodyTextOptions;
+  final TextOptions storeTextOptions;
+  final TextOptions priceTextOptions;
+  final TextOptions callToActionOptions;
+
+  const BannerOptions({
+    this.backgroundColor = Colors.white,
+    this.indicatorColor = Colors.black,
+    this.ratingColor = Colors.yellow,
+    this.adLabelOptions = const TextOptions(
+      fontSize: 12,
+      color: Colors.white,
+      backgroundColor: Color(0xFFFFCC66),
+    ),
+    this.headlineTextOptions = const TextOptions(
+      fontSize: 16,
+      color: Colors.black,
+    ),
+    this.advertiserTextOptions = const TextOptions(
+      fontSize: 14,
+      color: Colors.black,
+    ),
+    this.bodyTextOptions = const TextOptions(
+      fontSize: 12,
+      color: Colors.grey,
+    ),
+    this.storeTextOptions = const TextOptions(
+      fontSize: 12,
+      color: Colors.black,
+    ),
+    this.priceTextOptions = const TextOptions(
+      fontSize: 12,
+      color: Colors.black,
+    ),
+    this.callToActionOptions = const TextOptions(
+      fontSize: 15,
+      color: Colors.white,
+      backgroundColor: Color(0xFF4CBE99),
+    ),
+  });
+
+  Map<String, dynamic> toJson() => {
+        "backgroundColor": "#${backgroundColor.value.toRadixString(16)}",
+        "indicatorColor": "#${indicatorColor.value.toRadixString(16)}",
+        "ratingColor": "#${ratingColor.value.toRadixString(16)}",
+        "adLabelOptions": adLabelOptions.toJson(),
+        "headlineTextOptions": headlineTextOptions.toJson(),
+        "advertiserTextOptions": advertiserTextOptions.toJson(),
+        "bodyTextOptions": bodyTextOptions.toJson(),
+        "storeTextOptions": storeTextOptions.toJson(),
+        "priceTextOptions": priceTextOptions.toJson(),
+        "callToActionOptions": callToActionOptions.toJson(),
+      };
+}
 
 class NativeAdmobBannerView extends StatefulWidget {
   static const String _viewType = "native_admob_banner_view";
 
   final String adUnitID;
-  final BannerStyle style;
+  final BannerOptions options;
   final bool showMedia;
 
   /// Content padding in format "left, top, right, bottom"
@@ -25,7 +105,7 @@ class NativeAdmobBannerView extends StatefulWidget {
   NativeAdmobBannerView({
     Key key,
     @required this.adUnitID,
-    this.style = BannerStyle.dark,
+    this.options,
     this.showMedia = true,
     this.contentPadding,
     this.onCreate,
@@ -38,12 +118,14 @@ class NativeAdmobBannerView extends StatefulWidget {
 
 class _NativeAdmobBannerViewState extends State<NativeAdmobBannerView> {
   EdgeInsets get _padding => widget.contentPadding ?? EdgeInsets.all(8);
+  BannerOptions get _options => widget.options ?? BannerOptions();
+
   NativeAdmobBannerViewCreatedCallback get _onCreate => widget.onCreate;
 
   @override
   Widget build(BuildContext context) {
     final padding = this._padding;
-    final style = widget.style == BannerStyle.dark ? "dark" : "light";
+    final options = this._options.toJson();
     final height =
         (widget.showMedia ? 330.0 : 140.0) + (padding.top + padding.bottom);
 
@@ -52,6 +134,13 @@ class _NativeAdmobBannerViewState extends State<NativeAdmobBannerView> {
         "${padding.right}," +
         "${padding.bottom}";
 
+    final creationParams = {
+      "adUnitID": widget.adUnitID,
+      "options": options,
+      "showMedia": widget.showMedia,
+      "contentPadding": contentPadding,
+    };
+
     if (defaultTargetPlatform == TargetPlatform.android) {
       return Container(
         height: height,
@@ -59,12 +148,7 @@ class _NativeAdmobBannerViewState extends State<NativeAdmobBannerView> {
           viewType: NativeAdmobBannerView._viewType,
           onPlatformViewCreated: _onPlatformViewCreated,
           creationParamsCodec: StandardMessageCodec(),
-          creationParams: {
-            "adUnitID": widget.adUnitID,
-            "style": style,
-            "showMedia": widget.showMedia,
-            "contentPadding": contentPadding,
-          },
+          creationParams: creationParams,
         ),
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -74,12 +158,7 @@ class _NativeAdmobBannerViewState extends State<NativeAdmobBannerView> {
           viewType: NativeAdmobBannerView._viewType,
           onPlatformViewCreated: _onPlatformViewCreated,
           creationParamsCodec: StandardMessageCodec(),
-          creationParams: {
-            "adUnitID": widget.adUnitID,
-            "style": style,
-            "showMedia": widget.showMedia,
-            "contentPadding": contentPadding,
-          },
+          creationParams: creationParams,
         ),
       );
     }
@@ -92,30 +171,15 @@ class _NativeAdmobBannerViewState extends State<NativeAdmobBannerView> {
   }
 }
 
-class NativeAdmob {
-  static NativeAdmob _instance;
-
-  factory NativeAdmob() => _instance ??= NativeAdmob._();
-
-  NativeAdmob._();
-
-  final _channel = MethodChannel("flutter_native_admob");
-
-  Future<Null> initialize({String appID}) async {
-    await _channel.invokeMethod("initialize", {"appID": appID});
-    return null;
-  }
-}
-
 class NativeAdController {
   final MethodChannel _channel;
 
   NativeAdController._(int id)
       : _channel = new MethodChannel("${NativeAdmobBannerView._viewType}_$id");
 
-  Future<Null> setStyle(BannerStyle style) async {
-    await _channel.invokeMethod("setStyle", {
-      "style": style == BannerStyle.dark ? "dark" : "light",
+  Future<Null> setOptions(BannerOptions options) async {
+    await _channel.invokeMethod("setOptions", {
+      "options": options.toJson(),
     });
     return null;
   }

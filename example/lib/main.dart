@@ -36,12 +36,54 @@ class _MyAppState extends State<MyApp> {
               color: Colors.green,
             ),
             NativeAdmobBannerView(
+              // Your ad unit id
               adUnitID: _adUnitID,
-              style: BannerStyle.dark,
+
+              // Styling native view with options
+              options: const BannerOptions(
+                backgroundColor: Colors.white,
+                indicatorColor: Colors.black,
+                ratingColor: Colors.yellow,
+                adLabelOptions: const TextOptions(
+                  fontSize: 12,
+                  color: Colors.white,
+                  backgroundColor: Color(0xFFFFCC66),
+                ),
+                headlineTextOptions: const TextOptions(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+                advertiserTextOptions: const TextOptions(
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+                bodyTextOptions: const TextOptions(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+                storeTextOptions: const TextOptions(
+                  fontSize: 12,
+                  color: Colors.black,
+                ),
+                priceTextOptions: const TextOptions(
+                  fontSize: 12,
+                  color: Colors.black,
+                ),
+                callToActionOptions: const TextOptions(
+                  fontSize: 15,
+                  color: Colors.white,
+                  backgroundColor: Color(0xFF4CBE99),
+                ),
+              ),
+
+              // Whether to show media or not
               showMedia: true,
+
+              // Content paddings
               contentPadding: EdgeInsets.all(10),
+
               onCreate: (controller) {
-                // controller.setStyle(BannerStyle.light); // Dynamic update style
+                // controller.setOptions(BannerOptions()); // change view styling options
               },
             ),
             Container(

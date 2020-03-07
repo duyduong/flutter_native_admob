@@ -8,8 +8,39 @@
 import UIKit
 import GoogleMobileAds
 
-enum BannerStyle: String {
-    case dark, light
+struct BannerOptions {
+    
+    struct TextOptions {
+        var fontSize: CGFloat
+        var color: UIColor
+        var backgroundColor: UIColor? = nil
+        
+        mutating func update(JSON: [String: Any]) {
+            if let fontSize = JSON["fontSize"] as? CGFloat {
+                self.fontSize = fontSize
+            }
+            
+            if let colorString = JSON["color"] as? String {
+                self.color = .fromHex(colorString)
+            }
+            
+            if let backgroundColorString = JSON["backgroundColor"] as? String {
+                self.backgroundColor = .fromHex(backgroundColorString)
+            }
+        }
+    }
+    
+    var backgroundColor: UIColor = .white
+    var indicatorColor: UIColor = .black
+    var ratingColor: UIColor = .yellow
+    
+    var adLabelOptions = TextOptions(fontSize: 12, color: .white, backgroundColor: .fromHex("FFCC66"))
+    var headlineTextOptions = TextOptions(fontSize: 16, color: .black)
+    var advertiserTextOptions = TextOptions(fontSize: 14, color: .black)
+    var bodyTextOptions = TextOptions(fontSize: 12, color: .gray)
+    var storeTextOptions = TextOptions(fontSize: 12, color: .black)
+    var priceTextOptions = TextOptions(fontSize: 12, color: .black)
+    var callToActionOptions = TextOptions(fontSize: 15, color: .white, backgroundColor: .fromHex("#4CBE99"))
 }
 
 // MARK: - Native ad holder view
@@ -20,8 +51,8 @@ class NativeAdmobBannerViewHoder: UIView {
         didSet { updateIsLoading() }
     }
     
-    var style: BannerStyle = .dark {
-        didSet { updateStyle() }
+    var bannerOptions = BannerOptions() {
+        didSet { updateOptions() }
     }
     
     var showMedia: Bool = true {
@@ -54,7 +85,7 @@ class NativeAdmobBannerViewHoder: UIView {
         addSubview(nativeAdView)
         
         updateIsLoading()
-        updateStyle()
+        updateOptions()
         updateShowMedia()
         updateContentPadding()
     }
@@ -63,7 +94,7 @@ class NativeAdmobBannerViewHoder: UIView {
         super.layoutSubviews()
         
         updateIsLoading()
-        updateStyle()
+        updateOptions()
         updateShowMedia()
         updateContentPadding()
     }
@@ -91,16 +122,10 @@ extension NativeAdmobBannerViewHoder {
         }
     }
     
-    func updateStyle() {
-        let primaryColor: UIColor = style == .dark ? .white : .black
-        
-        backgroundColor = style == .dark ? .black : .white
-        indicatorView.color = primaryColor
-        nativeAdView.adHeadLineLbl.textColor = primaryColor
-        nativeAdView.adAdvertiserLbl.textColor = primaryColor
-        nativeAdView.adBodyLbl.textColor = style == .dark ? .fromHex("#d3d3d3") : .gray
-        nativeAdView.adStoreLbl.textColor = primaryColor
-        nativeAdView.adPriceLbl.textColor = primaryColor
+    func updateOptions() {
+        backgroundColor = bannerOptions.backgroundColor
+        indicatorView.color = bannerOptions.indicatorColor
+        nativeAdView.updateOptions(bannerOptions)
     }
     
     func updateShowMedia() {
@@ -119,18 +144,21 @@ extension NativeAdmobBannerViewHoder {
 
 class UnifiedNativeAdView: GADUnifiedNativeAdView {
     
-    let adLabelView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .fromHex("FFCC66")
-        view.layer.cornerRadius = 3
-        view.clipsToBounds = true
-        
+    let adLabelLbl: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = .white
         label.text = "Ad"
-        view.addSubview(label)
-        label.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 1, left: 3, bottom: 1, right: 3))
+        return label
+    }()
+    
+    lazy var adLabelView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .fromHex("FFCC66")
+        view.layer.cornerRadius = 3
+        view.clipsToBounds = true
+        view.addSubview(adLabelLbl)
+        adLabelLbl.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 1, left: 3, bottom: 1, right: 3))
         
         return view
     }()
@@ -185,7 +213,8 @@ class UnifiedNativeAdView: GADUnifiedNativeAdView {
         button.setBackgroundImage(.from(color: .fromHex("#4CBE99")), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        button.contentEdgeInsets = UIEdgeInsets(top: 3, left: 5, bottom: 3, right: 5)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        button.autoSetDimension(.height, toSize: 30)
         return button
     }()
     
@@ -207,7 +236,7 @@ class UnifiedNativeAdView: GADUnifiedNativeAdView {
         setupView()
     }
     
-    func setupView() {
+    private func setupView() {
         self.mediaView = adMediaView
         self.headlineView = adHeadLineLbl
         self.callToActionView = callToActionBtn
@@ -256,7 +285,7 @@ class UnifiedNativeAdView: GADUnifiedNativeAdView {
         mainLayout.autoPinEdgesToSuperviewEdges()
     }
     
-    func setNativeAd(_ nativeAd: GADUnifiedNativeAd) {
+    fileprivate func setNativeAd(_ nativeAd: GADUnifiedNativeAd) {
         self.nativeAd = nativeAd
         
         // Set the mediaContent on the GADMediaView to populate it with available
@@ -300,5 +329,34 @@ class UnifiedNativeAdView: GADUnifiedNativeAdView {
         // In order for the SDK to process touch events properly, user interaction
         // should be disabled.
         callToActionBtn.isUserInteractionEnabled = false
+    }
+    
+    fileprivate func updateOptions(_ bannerOptions: BannerOptions) {
+        adLabelLbl.textColor = bannerOptions.adLabelOptions.color
+        adLabelLbl.font = UIFont.systemFont(ofSize: bannerOptions.adLabelOptions.fontSize)
+        adLabelView.backgroundColor = bannerOptions.adLabelOptions.backgroundColor ?? .fromHex("FFCC66")
+        
+        adHeadLineLbl.textColor = bannerOptions.headlineTextOptions.color
+        adHeadLineLbl.font = UIFont.systemFont(ofSize: bannerOptions.headlineTextOptions.fontSize)
+        
+        adAdvertiserLbl.textColor = bannerOptions.advertiserTextOptions.color
+        adAdvertiserLbl.font = UIFont.systemFont(ofSize: bannerOptions.advertiserTextOptions.fontSize)
+        
+        adBodyLbl.textColor = bannerOptions.bodyTextOptions.color
+        adBodyLbl.font = UIFont.systemFont(ofSize: bannerOptions.bodyTextOptions.fontSize)
+        
+        adStoreLbl.textColor = bannerOptions.storeTextOptions.color
+        adStoreLbl.font = UIFont.systemFont(ofSize: bannerOptions.storeTextOptions.fontSize)
+        
+        adPriceLbl.textColor = bannerOptions.priceTextOptions.color
+        adPriceLbl.font = UIFont.systemFont(ofSize: bannerOptions.priceTextOptions.fontSize)
+        
+        callToActionBtn.setTitleColor(bannerOptions.callToActionOptions.color, for: .normal)
+        callToActionBtn.titleLabel?.font = UIFont.systemFont(ofSize: bannerOptions.callToActionOptions.fontSize)
+        if let bgColor = bannerOptions.callToActionOptions.backgroundColor {
+            callToActionBtn.setBackgroundImage(.from(color: bgColor), for: .normal)
+        }
+        
+        starIcon.color = bannerOptions.ratingColor
     }
 }

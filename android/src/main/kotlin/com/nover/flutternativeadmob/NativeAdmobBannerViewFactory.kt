@@ -3,9 +3,11 @@ package com.nover.flutternativeadmob
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -22,8 +24,86 @@ import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 
-enum class BannerStyle {
-  dark, light
+data class TextOptions(
+        var fontSize: Float,
+        var color: Int,
+        var backgroundColor: Int? = null
+) {
+  fun update(data: HashMap<*,*>) {
+    (data["fontSize"] as? Float)?.let {
+      fontSize = it
+    }
+
+    (data["color"] as? String)?.let {
+      color = Color.parseColor(it)
+    }
+
+    (data["backgroundColor"] as? String)?.let {
+      backgroundColor = Color.parseColor(it)
+    }
+  }
+}
+
+data class BannerOptions(
+        var backgroundColor: Int = Color.WHITE,
+        var indicatorColor: Int = Color.BLACK,
+        var ratingColor: Int = Color.YELLOW,
+        val adLabelOptions: TextOptions = TextOptions(12f, Color.WHITE, Color.parseColor("#FFCC66")),
+        val headlineTextOptions: TextOptions = TextOptions(16f, Color.BLACK),
+        val advertiserTextOptions: TextOptions = TextOptions(14f, Color.BLACK),
+        val bodyTextOptions: TextOptions = TextOptions(12f, Color.GRAY),
+        val storeTextOptions: TextOptions = TextOptions(12f, Color.BLACK),
+        val priceTextOptions: TextOptions = TextOptions(12f, Color.BLACK),
+        val callToActionOptions: TextOptions = TextOptions(15f, Color.WHITE, Color.parseColor("#4CBE99"))
+) {
+  companion object {
+
+    fun parse(data: HashMap<*,*>): BannerOptions {
+      val bannerOptions = BannerOptions()
+
+      (data["backgroundColor"] as? String)?.let {
+        bannerOptions.backgroundColor = Color.parseColor(it)
+      }
+
+      (data["indicatorColor"] as? String)?.let {
+        bannerOptions.indicatorColor = Color.parseColor(it)
+      }
+
+      (data["ratingColor"] as? String)?.let {
+        bannerOptions.ratingColor = Color.parseColor(it)
+      }
+
+      (data["adLabelOptions"] as? HashMap<*,*>)?.let {
+        bannerOptions.adLabelOptions.update(it)
+      }
+
+      (data["headlineTextOptions"] as? HashMap<*,*>)?.let {
+        bannerOptions.headlineTextOptions.update(it)
+      }
+
+      (data["advertiserTextOptions"] as? HashMap<*,*>)?.let {
+        bannerOptions.advertiserTextOptions.update(it)
+      }
+
+      (data["bodyTextOptions"] as? HashMap<*,*>)?.let {
+        bannerOptions.bodyTextOptions.update(it)
+      }
+
+      (data["storeTextOptions"] as? HashMap<*,*>)?.let {
+        bannerOptions.storeTextOptions.update(it)
+      }
+
+      (data["priceTextOptions"] as? HashMap<*,*>)?.let {
+        bannerOptions.priceTextOptions.update(it)
+      }
+
+      (data["callToActionOptions"] as? HashMap<*,*>)?.let {
+        bannerOptions.callToActionOptions.update(it)
+      }
+
+      return bannerOptions
+    }
+  }
 }
 
 class NativeAdmobBannerViewFactory(
@@ -52,9 +132,10 @@ class NativeAdmobBannerView(
 
     val map = params as HashMap<*,*>
 
-    // set view style
-    val style = BannerStyle.valueOf(map["style"] as String)
-    view.style = style
+    // set view options
+    view.options = (map["options"] as? HashMap<*,*>)?.let {
+      BannerOptions.parse(it)
+    } ?: BannerOptions()
 
     // set media visibility
     val showMedia = map["showMedia"] as Boolean
@@ -83,11 +164,11 @@ class NativeAdmobBannerView(
   override fun dispose() { }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-    val method = CallMethod.valueOf(call.method)
-    when (method) {
-      CallMethod.setStyle -> {
-        val style = BannerStyle.valueOf(call.argument("style")!!)
-        view.style = style
+    when (CallMethod.valueOf(call.method)) {
+      CallMethod.setOptions -> {
+        view.options = (call.arguments() as? HashMap<*,*>)?.let {
+          BannerOptions.parse(it)
+        } ?: BannerOptions()
       }
     }
   }
@@ -97,10 +178,10 @@ class NativeAdmobBannerViewHoder @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr) {
 
-  var style = BannerStyle.dark
+  var options = BannerOptions()
     set(value) {
       field = value
-      updateStyle()
+      updateOptions()
     }
 
   var showMedia = true
@@ -118,6 +199,10 @@ class NativeAdmobBannerViewHoder @JvmOverloads constructor(
   private val adContainer: LinearLayout
   private val adView: UnifiedNativeAdView
 
+  private val loadingIndicator: ProgressBar
+
+  private val ratingBar: RatingBar
+
   private val adMedia: MediaView
 
   private val adHeadline: TextView
@@ -126,13 +211,14 @@ class NativeAdmobBannerViewHoder @JvmOverloads constructor(
   private val adPrice: TextView
   private val adStore: TextView
   private val adAttribution: TextView
+  private val callToAction: Button
 
   init {
     val inflater = LayoutInflater.from(context)
     inflater.inflate(R.layout.native_admob_banner_view, this, true)
 
     // Show indicator
-    val loadingIndicator = findViewById<ProgressBar>(R.id.loading_indicator)
+    loadingIndicator = findViewById<ProgressBar>(R.id.loading_indicator)
     loadingIndicator.visibility = View.VISIBLE
 
     adContainer = findViewById(R.id.ad_container)
@@ -149,9 +235,11 @@ class NativeAdmobBannerViewHoder @JvmOverloads constructor(
     adStore = adView.findViewById(R.id.ad_store)
     adAttribution = adView.findViewById(R.id.ad_attribution)
 
-    adAttribution.background = Color.parseColor("#FFCC66").toRoundedColor(3f)
+    ratingBar = adView.findViewById(R.id.ad_stars)
 
-    updateStyle()
+    adAttribution.background = Color.parseColor("#FFCC66").toRoundedColor(3f)
+    callToAction = adView.findViewById(R.id.ad_call_to_action)
+
     updateMediaView()
     updateContentPadding()
 
@@ -166,17 +254,16 @@ class NativeAdmobBannerViewHoder @JvmOverloads constructor(
     // Register the view used for each individual asset.
     adView.headlineView = adHeadline
     adView.bodyView = adBody
-    adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
+    adView.callToActionView = callToAction
     adView.iconView = adView.findViewById(R.id.ad_icon)
     adView.priceView = adPrice
-    adView.starRatingView = adView.findViewById(R.id.ad_stars)
+    adView.starRatingView = ratingBar
     adView.storeView = adStore
     adView.advertiserView = adAdvertiser
   }
 
   fun populateNativeAdView(nativeAd: UnifiedNativeAd) {
     // hide indicator
-    val loadingIndicator = findViewById<ProgressBar>(R.id.loading_indicator)
     loadingIndicator.visibility = View.GONE
 
     // show ad container
@@ -230,27 +317,38 @@ class NativeAdmobBannerViewHoder @JvmOverloads constructor(
     adView.setNativeAd(nativeAd)
   }
 
-  private fun updateStyle() {
-    val bgColor: Int
-    when (style) {
-      BannerStyle.dark -> {
-        setBackgroundColor(Color.BLACK)
+  private fun updateOptions() {
+    setBackgroundColor(options.backgroundColor)
 
-        adHeadline.setTextColor(Color.WHITE)
-        adAdvertiser.setTextColor(Color.WHITE)
-        adBody.setTextColor(Color.LTGRAY)
-        adStore.setTextColor(Color.WHITE)
-        adPrice.setTextColor(Color.WHITE)
-      }
-      BannerStyle.light -> {
-        setBackgroundColor(Color.WHITE)
+    loadingIndicator.indeterminateDrawable
+            .setColorFilter(options.indicatorColor, PorterDuff.Mode.SRC_IN)
+    ratingBar.progressDrawable
+            .setColorFilter(options.ratingColor, PorterDuff.Mode.SRC_ATOP)
 
-        adHeadline.setTextColor(Color.BLACK)
-        adAdvertiser.setTextColor(Color.BLACK)
-        adBody.setTextColor(Color.GRAY)
-        adStore.setTextColor(Color.BLACK)
-        adPrice.setTextColor(Color.BLACK)
-      }
+    options.adLabelOptions.backgroundColor?.let {
+      adAttribution.background = it.toRoundedColor(3f)
+    }
+    adAttribution.setTextColor(options.adLabelOptions.color)
+
+    adHeadline.setTextColor(options.headlineTextOptions.color)
+    adHeadline.textSize = options.headlineTextOptions.fontSize
+
+    adAdvertiser.setTextColor(options.advertiserTextOptions.color)
+    adAdvertiser.textSize = options.advertiserTextOptions.fontSize
+
+    adBody.setTextColor(options.bodyTextOptions.color)
+    adBody.textSize = options.bodyTextOptions.fontSize
+
+    adStore.setTextColor(options.storeTextOptions.color)
+    adStore.textSize = options.storeTextOptions.fontSize
+
+    adPrice.setTextColor(options.priceTextOptions.color)
+    adPrice.textSize = options.priceTextOptions.fontSize
+
+    callToAction.setTextColor(options.callToActionOptions.color)
+    callToAction.textSize = options.callToActionOptions.fontSize
+    options.callToActionOptions.backgroundColor?.let {
+      callToAction.setBackgroundColor(it)
     }
   }
 

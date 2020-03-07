@@ -3,6 +3,7 @@
 # flutter_native_admob
 
 Plugin to integrate Firebase Native Admob to Flutter application
+
 Platform supported: **iOS**, **Android**
 
 ## Getting Started
@@ -32,6 +33,7 @@ apply plugin: 'com.google.gms.google-services'
 ```
 
 3. Add your Admob App ID.
+
    **_Important_**: This step is required as of Google Mobile Ads SDK version 17.0.0. Failure to add this <meta-data> tag results in a crash with the message: The Google Mobile Ads SDK was initialized incorrectly.
 
 ```xml
@@ -48,7 +50,9 @@ apply plugin: 'com.google.gms.google-services'
 ### Setup iOS project
 
 1. Add Admob App ID:
+
    **_Important_**: This step is required as of Google Mobile Ads SDK version 7.42.0. Failure to add add this Info.plist entry results in a crash with the message: The Google Mobile Ads SDK was initialized incorrectly.
+
    In your app's Info.plist file, add a GADApplicationIdentifier key with a string value of your AdMob app ID. You can find your App ID in the AdMob UI.
    You can make this change programmatically:
 
@@ -58,6 +62,7 @@ apply plugin: 'com.google.gms.google-services'
 ```
 
 2. Add embeded view support:
+
    In your app's Info.plist file, add this
 
 ```xml
@@ -95,12 +100,54 @@ return MaterialApp(
           color: Colors.green,
         ),
         NativeAdmobBannerView(
+          // Your ad unit id
           adUnitID: "<Your ad unit ID>",
-          style: BannerStyle.dark, // enum dark or light
-          showMedia: true, // whether to show media view or not
-          contentPadding: EdgeInsets.all(10), // content padding
+
+          // Styling native view with options
+          options: const BannerOptions(
+            backgroundColor: Colors.white,
+            indicatorColor: Colors.black,
+            ratingColor: Colors.yellow,
+            adLabelOptions: const TextOptions(
+              fontSize: 12,
+              color: Colors.white,
+              backgroundColor: Color(0xFFFFCC66),
+            ),
+            headlineTextOptions: const TextOptions(
+              fontSize: 16,
+              color: Colors.black,
+            ),
+            advertiserTextOptions: const TextOptions(
+              fontSize: 14,
+              color: Colors.black,
+            ),
+            bodyTextOptions: const TextOptions(
+              fontSize: 12,
+              color: Colors.grey,
+            ),
+            storeTextOptions: const TextOptions(
+              fontSize: 12,
+              color: Colors.black,
+            ),
+            priceTextOptions: const TextOptions(
+              fontSize: 12,
+              color: Colors.black,
+            ),
+            callToActionOptions: const TextOptions(
+              fontSize: 15,
+              color: Colors.white,
+              backgroundColor: Color(0xFF4CBE99),
+            ),
+          ),
+
+          // Whether to show media or not
+          showMedia: true,
+
+          // Content paddings
+          contentPadding: EdgeInsets.all(10),
+
           onCreate: (controller) {
-            controller.setStyle(BannerStyle.light); // Dynamic update style
+            // controller.setOptions(BannerOptions()); // change view styling options
           },
         ),
         Container(

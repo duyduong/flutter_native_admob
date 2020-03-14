@@ -37,7 +37,6 @@ class NativeAdView: GADUnifiedNativeAdView {
         adMediaView.contentMode = .scaleAspectFill
         adMediaView.layer.cornerRadius = 5
         adMediaView.clipsToBounds = true
-        adMediaView.autoSetDimensions(to: CGSize(width: 115, height: 107))
         return adMediaView
     }() 
     
@@ -107,6 +106,9 @@ private extension NativeAdView {
         holderView.addSubview(adLabelView)
         adLabelView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .trailing)
 
+        let height = UIScreen.main.bounds.width/3
+        adMediaView.autoSetDimensions(to: CGSize(width: height, height: height))
+
         // adMediaView.setContentHuggingPriority(.defaultLow, for: .vertical)
         let horLayout = StackLayout()
             .direction(.horizontal)
@@ -117,7 +119,7 @@ private extension NativeAdView {
             ])
         let mainLayout = StackLayout()
             .direction(.vertical)
-            .spacing(15)
+            .spacing(10)
             .children([
                 holderView,
                 horLayout,

@@ -42,6 +42,8 @@ class NativeAdView: GADUnifiedNativeAdView {
     
     let adHeadLineLbl: UITextView = {
         let label = UITextView()
+        label.textContainerInset = UIEdgeInsets.zero
+        label.textContainer.lineFragmentPadding = 0
         label.backgroundColor = UIColor.clear
         label.isSelectable = false
         label.isEditable = false
@@ -110,22 +112,24 @@ private extension NativeAdView {
         adMediaView.autoSetDimensions(to: CGSize(width: height, height: height))
 
         // adMediaView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        let textLayout = StackLayout()
+       .direction(.vertical)
+       .spacing(10)
+       .children([
+           adHeadLineLbl,
+           holderView,
+       ])
+        
         let horLayout = StackLayout()
-            .direction(.horizontal)
-            .spacing(10)
-            .children([
-                adHeadLineLbl,
-                adMediaView,
-            ])
-        let mainLayout = StackLayout()
-            .direction(.vertical)
-            .spacing(10)
-            .children([
-                holderView,
-                horLayout,
-            ])
-        addSubview(mainLayout)
-        mainLayout.autoPinEdgesToSuperviewEdges()
+        .direction(.horizontal)
+        .spacing(24)
+        .children([
+            textLayout,
+            adMediaView,
+        ])
+       
+        addSubview(horLayout)
+        horLayout.autoPinEdgesToSuperviewEdges()
     }
     
     func updateOptions() {

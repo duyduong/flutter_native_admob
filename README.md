@@ -123,6 +123,8 @@ NativeAdmob(
 ### Using controller, loading, error widget and options
 
 ```dart
+final _controller = NativeAdmobController();
+
 NativeAdmob(
   adUnitID: "<Your ad unit ID>",
   loading: Center(child: CircularProgressIndicator()),

@@ -139,30 +139,30 @@ class NativeAdView @JvmOverloads constructor(
     ratingBar.progressDrawable
         .setColorFilter(options.ratingColor, PorterDuff.Mode.SRC_ATOP)
 
-    options.adLabelOptions.backgroundColor?.let {
+    options.adLabelTextStyle.backgroundColor?.let {
       adAttribution.background = it.toRoundedColor(3f)
     }
-    adAttribution.textSize = options.adLabelOptions.fontSize
-    adAttribution.setTextColor(options.adLabelOptions.color)
+    adAttribution.textSize = options.adLabelTextStyle.fontSize
+    adAttribution.setTextColor(options.adLabelTextStyle.color)
 
-    adHeadline.setTextColor(options.headlineTextOptions.color)
-    adHeadline.textSize = options.headlineTextOptions.fontSize
+    adHeadline.setTextColor(options.headlineTextStyle.color)
+    adHeadline.textSize = options.headlineTextStyle.fontSize
 
-    adAdvertiser.setTextColor(options.advertiserTextOptions.color)
-    adAdvertiser.textSize = options.advertiserTextOptions.fontSize
+    adAdvertiser.setTextColor(options.advertiserTextStyle.color)
+    adAdvertiser.textSize = options.advertiserTextStyle.fontSize
 
-    adBody.setTextColor(options.bodyTextOptions.color)
-    adBody.textSize = options.bodyTextOptions.fontSize
+    adBody.setTextColor(options.bodyTextStyle.color)
+    adBody.textSize = options.bodyTextStyle.fontSize
 
-    adStore.setTextColor(options.storeTextOptions.color)
-    adStore.textSize = options.storeTextOptions.fontSize
+    adStore.setTextColor(options.storeTextStyle.color)
+    adStore.textSize = options.storeTextStyle.fontSize
 
-    adPrice.setTextColor(options.priceTextOptions.color)
-    adPrice.textSize = options.priceTextOptions.fontSize
+    adPrice.setTextColor(options.priceTextStyle.color)
+    adPrice.textSize = options.priceTextStyle.fontSize
 
-    callToAction.setTextColor(options.callToActionOptions.color)
-    callToAction.textSize = options.callToActionOptions.fontSize
-    options.callToActionOptions.backgroundColor?.let {
+    callToAction.setTextColor(options.callToActionStyle.color)
+    callToAction.textSize = options.callToActionStyle.fontSize
+    options.callToActionStyle.backgroundColor?.let {
       callToAction.setBackgroundColor(it)
     }
   }

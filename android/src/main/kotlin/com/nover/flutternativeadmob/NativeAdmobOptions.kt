@@ -2,7 +2,7 @@ package com.nover.flutternativeadmob
 
 import android.graphics.Color
 
-data class NativeTextStyle(
+class NativeTextStyle(
     var fontSize: Float,
     var color: Int,
     var backgroundColor: Int? = null
@@ -22,52 +22,56 @@ data class NativeTextStyle(
   }
 }
 
-data class NativeAdmobOptions(
+class NativeAdmobOptions(
     var showMediaContent: Boolean = true,
     var ratingColor: Int = Color.YELLOW,
-    val adLabelOptions: NativeTextStyle = NativeTextStyle(12f, Color.WHITE, Color.parseColor("#FFCC66")),
-    val headlineTextOptions: NativeTextStyle = NativeTextStyle(16f, Color.BLACK),
-    val advertiserTextOptions: NativeTextStyle = NativeTextStyle(14f, Color.BLACK),
-    val bodyTextOptions: NativeTextStyle = NativeTextStyle(12f, Color.GRAY),
-    val storeTextOptions: NativeTextStyle = NativeTextStyle(12f, Color.BLACK),
-    val priceTextOptions: NativeTextStyle = NativeTextStyle(12f, Color.BLACK),
-    val callToActionOptions: NativeTextStyle = NativeTextStyle(15f, Color.WHITE, Color.parseColor("#4CBE99"))
+    val adLabelTextStyle: NativeTextStyle = NativeTextStyle(12f, Color.WHITE, Color.parseColor("#FFCC66")),
+    val headlineTextStyle: NativeTextStyle = NativeTextStyle(16f, Color.BLACK),
+    val advertiserTextStyle: NativeTextStyle = NativeTextStyle(14f, Color.BLACK),
+    val bodyTextStyle: NativeTextStyle = NativeTextStyle(12f, Color.GRAY),
+    val storeTextStyle: NativeTextStyle = NativeTextStyle(12f, Color.BLACK),
+    val priceTextStyle: NativeTextStyle = NativeTextStyle(12f, Color.BLACK),
+    val callToActionStyle: NativeTextStyle = NativeTextStyle(15f, Color.WHITE, Color.parseColor("#4CBE99"))
 ) {
   companion object {
 
     fun parse(data: HashMap<*, *>): NativeAdmobOptions {
       val bannerOptions = NativeAdmobOptions()
 
+      (data["showMediaContent"] as? Boolean)?.let {
+        bannerOptions.showMediaContent = it
+      }
+
       (data["ratingColor"] as? String)?.let {
         bannerOptions.ratingColor = Color.parseColor(it)
       }
 
-      (data["adLabelOptions"] as? HashMap<*, *>)?.let {
-        bannerOptions.adLabelOptions.update(it)
+      (data["adLabelTextStyle"] as? HashMap<*, *>)?.let {
+        bannerOptions.adLabelTextStyle.update(it)
       }
 
-      (data["headlineTextOptions"] as? HashMap<*, *>)?.let {
-        bannerOptions.headlineTextOptions.update(it)
+      (data["headlineTextStyle"] as? HashMap<*, *>)?.let {
+        bannerOptions.headlineTextStyle.update(it)
       }
 
-      (data["advertiserTextOptions"] as? HashMap<*, *>)?.let {
-        bannerOptions.advertiserTextOptions.update(it)
+      (data["advertiserTextStyle"] as? HashMap<*, *>)?.let {
+        bannerOptions.advertiserTextStyle.update(it)
       }
 
-      (data["bodyTextOptions"] as? HashMap<*, *>)?.let {
-        bannerOptions.bodyTextOptions.update(it)
+      (data["bodyTextStyle"] as? HashMap<*, *>)?.let {
+        bannerOptions.bodyTextStyle.update(it)
       }
 
-      (data["storeTextOptions"] as? HashMap<*, *>)?.let {
-        bannerOptions.storeTextOptions.update(it)
+      (data["storeTextStyle"] as? HashMap<*, *>)?.let {
+        bannerOptions.storeTextStyle.update(it)
       }
 
-      (data["priceTextOptions"] as? HashMap<*, *>)?.let {
-        bannerOptions.priceTextOptions.update(it)
+      (data["priceTextStyle"] as? HashMap<*, *>)?.let {
+        bannerOptions.priceTextStyle.update(it)
       }
 
-      (data["callToActionOptions"] as? HashMap<*, *>)?.let {
-        bannerOptions.callToActionOptions.update(it)
+      (data["callToActionStyle"] as? HashMap<*, *>)?.let {
+        bannerOptions.callToActionStyle.update(it)
       }
 
       return bannerOptions

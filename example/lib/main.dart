@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_native_admob/native_admob_options.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,7 +11,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static const _adUnitID = "<Your ad unit ID>";
+  static const _adUnitID = "ca-app-pub-3940256099942544/8135179316";
 
   final _controller = NativeAdmobController();
 
@@ -45,6 +46,11 @@ class _MyAppState extends State<MyApp> {
               child: NativeAdmob(
                 adUnitID: _adUnitID,
                 controller: _controller,
+                options: NativeAdmobOptions(
+                  ratingColor: Colors.red,
+                  headlineTextStyle: NativeTextStyle(color: Colors.red),
+                  bodyTextStyle: NativeTextStyle(color: Colors.red),
+                ),
               ),
             ),
             Container(

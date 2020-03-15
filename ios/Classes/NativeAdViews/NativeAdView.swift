@@ -111,38 +111,42 @@ class NativeAdView: GADUnifiedNativeAdView {
         // Set the mediaContent on the GADMediaView to populate it with available
         // video/image asset.
         adMediaView.mediaContent = nativeAd.mediaContent
-
+        
         // Populate the native ad view with the native ad assets.
         // The headline is guaranteed to be present in every native ad.
         adHeadLineLbl.text = nativeAd.headline
-
+        
         // These assets are not guaranteed to be present. Check that they are before
         // showing or hiding them.
         adBodyLbl.text = nativeAd.body
-        adBodyLbl.isHidden = nativeAd.body == nil
-
+        adBodyLbl.isHidden = nativeAd.body.isNilOrEmpty
+        
         callToActionBtn.setTitle(nativeAd.callToAction, for: .normal)
-        callToActionBtn.isHidden = nativeAd.callToAction == nil
-
+        callToActionBtn.isHidden = nativeAd.callToAction.isNilOrEmpty
+        
         adIconView.image = nativeAd.icon?.image
         adIconView.isHidden = nativeAd.icon == nil
-
+        
         adRatingView.arrangedSubviews.forEach { view in
             view.removeFromSuperview()
         }
         let numOfStars = Int(truncating: nativeAd.starRating ?? 0)
-        adRatingView.children(Array(0..<numOfStars).map { _ in starIcon })
+        adRatingView.children(Array(0..<numOfStars).map { _ in
+            let icon = self.starIcon
+            icon.color = options.ratingColor
+            return icon
+        })
         adRatingView.isHidden = nativeAd.starRating == nil
-
+        
         adStoreLbl.text = nativeAd.store
-        adStoreLbl.isHidden = nativeAd.store == nil
-
+        adStoreLbl.isHidden = nativeAd.store.isNilOrEmpty
+        
         adPriceLbl.text = nativeAd.price
-        adPriceLbl.isHidden = nativeAd.price == nil
-
+        adPriceLbl.isHidden = nativeAd.price.isNilOrEmpty
+        
         adAdvertiserLbl.text = nativeAd.advertiser
-        adAdvertiserLbl.isHidden = nativeAd.advertiser == nil
-
+        adAdvertiserLbl.isHidden = nativeAd.advertiser.isNilOrEmpty
+        
         // In order for the SDK to process touch events properly, user interaction
         // should be disabled.
         callToActionBtn.isUserInteractionEnabled = false
@@ -174,18 +178,19 @@ private extension NativeAdView {
             ]),
         ])
         
-        let actionLayout = StackLayout().spacing(5).children([
-            UIView(),
-            adPriceLbl,
-            adStoreLbl,
-            callToActionBtn
-        ])
+        let actionLayout = StackLayout()
+            .alignItems(.center)
+            .spacing(5)
+            .children([
+                UIView(),
+                StackViewItem(view: adPriceLbl, attribute: .fill(insets: .zero)),
+                StackViewItem(view: adStoreLbl, attribute: .fill(insets: .zero)),
+                callToActionBtn
+            ])
         
         let holderView = UIView()
         holderView.addSubview(adLabelView)
         adLabelView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .trailing)
-        
-        adMediaView.setContentHuggingPriority(.defaultLow, for: .vertical)
         
         let mainLayout = StackLayout()
             .direction(.vertical)
@@ -194,7 +199,7 @@ private extension NativeAdView {
                 holderView,
                 adMediaView,
                 infoLayout,
-                adBodyLbl,
+                StackViewItem(view: adBodyLbl, attribute: .fill(insets: .zero)),
                 actionLayout
             ])
         addSubview(mainLayout)

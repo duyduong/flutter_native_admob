@@ -15,18 +15,18 @@ For help getting started with Flutter, view our online [documentation](http://fl
 
 ```s
 dependencies {
-// Example  existing  classpath
-classpath  'com.android.tools.build:gradle:3.2.1'
-// Add  the  google  services  classpath
-classpath  'com.google.gms:google-services:4.3.0'
+  // Example existing classpath
+  classpath 'com.android.tools.build:gradle:3.2.1'
+  // Add the google services classpath
+  classpath 'com.google.gms:google-services:4.3.0'
 }
 ```
 
 2. Add the apply plugin to the [project]/android/app/build.gradle file.
 
 ```s
-// ADD  THIS  AT  THE  BOTTOM
-apply  plugin:  'com.google.gms.google-services'
+// ADD THIS AT THE BOTTOM
+apply plugin: 'com.google.gms.google-services'
 ```
 
 3. Add your Admob App ID.
@@ -35,12 +35,12 @@ apply  plugin:  'com.google.gms.google-services'
 
 ```xml
 <manifest>
-	<application>
-		<!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
-		<meta-data
-			android:name="com.google.android.gms.ads.APPLICATION_ID"
-			android:value="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"/>
-	</application>
+  <application>
+    <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+    <meta-data
+      android:name="com.google.android.gms.ads.APPLICATION_ID"
+      android:value="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"/>
+  </application>
 </manifest>
 ```
 
@@ -85,7 +85,6 @@ In your app's Info.plist file, add this
 | Property            | Description                                                                                    | Type            | Default value                                                           |
 | ------------------- | ---------------------------------------------------------------------------------------------- | --------------- | ----------------------------------------------------------------------- |
 | showMediaContent    | Whether to show the media content or not                                                       | bool            | true                                                                    |
-| backgroundColor     | Native ad background color                                                                     | Color           | Colors.white                                                            |
 | ratingColor         | Rating star color                                                                              | Color           | Colors.yellow                                                           |
 | adLabelTextStyle    | The ad label on the top left corner                                                            | NativeTextStyle | `fontSize: 12, color: Colors.white, backgroundColor: Color(0xFFFFCC66)` |
 | headlineTextStyle   | The ad headline title                                                                          | NativeTextStyle | `fontSize: 16, color: Colors.black`                                     |
@@ -105,11 +104,11 @@ In your app's Info.plist file, add this
 
 #### `NativeAdmobController`
 
-| Property/Function                          | Description                                                                          | Type                |
-| :----------------------------------------- | :----------------------------------------------------------------------------------- | :------------------ |
-| stateChanged                               | Stream that notify each time the loading state changed                               | Stream<AdLoadState> |
-| void setAdUnitID(String adUnitID)          | Change the ad unit ID, it will load the ad again if the id is changed from previouse |                     |
-| void reloadAd({bool forceRefresh = false}) | Reload the ad                                                                        | Color               |
+| Property/Function                          | Description                                                                         | Type                |
+| :----------------------------------------- | :---------------------------------------------------------------------------------- | :------------------ |
+| stateChanged                               | Stream that notify each time the loading state changed                              | Stream<AdLoadState> |
+| void setAdUnitID(String adUnitID)          | Change the ad unit ID, it will load the ad again if the id is changed from previous |                     |
+| void reloadAd({bool forceRefresh = false}) | Reload the ad                                                                       |                     |
 
 ## Examples
 
@@ -117,24 +116,22 @@ In your app's Info.plist file, add this
 
 ```dart
 NativeAdmob(
-	adUnitID: "<Your ad unit ID>"
+  adUnitID: "<Your ad unit ID>"
 )
 ```
 
 ### Using controller, loading, error widget and options
 
 ```dart
-final _controller = NativeAdmobController();
-
 NativeAdmob(
-	adUnitID: "<Your ad unit ID>",
-	loading: Center(child: CircularProgressIndicator()),
-	error: Text("Failed to load the ad"),
+  adUnitID: "<Your ad unit ID>",
+  loading: Center(child: CircularProgressIndicator()),
+  error: Text("Failed to load the ad"),
   controller: _controller,
   options: NativeAdmobOptions(
     ratingColor: Colors.red,
     // Others ...
-  )
+  ),
 )
 ```
 

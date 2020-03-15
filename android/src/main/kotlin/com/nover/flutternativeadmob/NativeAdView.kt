@@ -95,7 +95,7 @@ class NativeAdView @JvmOverloads constructor(
     val icon = nativeAd.icon
 
     if (icon == null) {
-      adView.iconView.visibility = View.INVISIBLE
+      adView.iconView.visibility = View.GONE
     } else {
       (adView.iconView as ImageView).setImageDrawable(icon.drawable)
       adView.iconView.visibility = View.VISIBLE
@@ -142,6 +142,7 @@ class NativeAdView @JvmOverloads constructor(
     options.adLabelOptions.backgroundColor?.let {
       adAttribution.background = it.toRoundedColor(3f)
     }
+    adAttribution.textSize = options.adLabelOptions.fontSize
     adAttribution.setTextColor(options.adLabelOptions.color)
 
     adHeadline.setTextColor(options.headlineTextOptions.color)

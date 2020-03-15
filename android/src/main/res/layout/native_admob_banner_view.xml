@@ -141,9 +141,13 @@
                         <Button
                             android:id="@+id/ad_call_to_action"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="30dp"
                             android:background="#4CBE99"
                             android:gravity="center"
+                            android:paddingStart="15dp"
+                            android:paddingTop="0dp"
+                            android:paddingEnd="15dp"
+                            android:paddingBottom="0dp"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
                     </LinearLayout>

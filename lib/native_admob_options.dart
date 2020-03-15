@@ -16,7 +16,7 @@ class NativeTextStyle {
             ? "#${backgroundColor.value.toRadixString(16)}"
             : null,
         "fontSize": fontSize,
-        "color": "#${color.value.toRadixString(16)}",
+        "color": color != null ? "#${color.value.toRadixString(16)}" : null,
       };
 }
 

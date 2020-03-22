@@ -168,7 +168,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     _subscription.cancel();
-    _nativeAdController.dispose()
+    _nativeAdController.dispose();
     super.dispose();
   }
 
@@ -222,6 +222,7 @@ class _MyAppState extends State<MyApp> {
               child: NativeAdmob(
                 // Your ad unit id
                 adUnitID: _adUnitID,
+                controller: _nativeAdController,
 
                 // Don't show loading widget when in loading state
                 loading: Container(),

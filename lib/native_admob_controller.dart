@@ -27,7 +27,11 @@ class NativeAdmobController {
     });
   }
 
-  void dispose() {}
+  void dispose() {
+    _pluginChannel.invokeMethod("disposeController", {
+      "controllerID": id,
+    });
+  }
 
   Future<Null> _handleMessages(MethodCall call) async {
     switch (call.method) {

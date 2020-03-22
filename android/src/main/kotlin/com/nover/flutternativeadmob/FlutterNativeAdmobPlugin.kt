@@ -23,7 +23,7 @@ class FlutterNativeAdmobPlugin(
 ) : MethodCallHandler {
 
   enum class CallMethod {
-    initController
+    initController, disposeController
   }
 
   companion object {
@@ -50,6 +50,12 @@ class FlutterNativeAdmobPlugin(
       CallMethod.initController -> {
         (call.argument<String>("controllerID"))?.let {
           NativeAdmobControllerManager.createController(it, messenger, context)
+        }
+      }
+
+      CallMethod.disposeController -> {
+        (call.argument<String>("controllerID"))?.let {
+          NativeAdmobControllerManager.removeController(it)
         }
       }
     }

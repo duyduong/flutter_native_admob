@@ -146,16 +146,14 @@ class NativeAdView: GADUnifiedNativeAdView {
         
         adAdvertiserLbl.text = nativeAd.advertiser
         adAdvertiserLbl.isHidden = nativeAd.advertiser.isNilOrEmpty
-        
-        // In order for the SDK to process touch events properly, user interaction
-        // should be disabled.
-        callToActionBtn.isUserInteractionEnabled = false
     }
 }
 
 private extension NativeAdView {
     
     func setupView() {
+        
+        
         self.mediaView = adMediaView
         self.headlineView = adHeadLineLbl
         self.callToActionView = callToActionBtn
@@ -202,6 +200,7 @@ private extension NativeAdView {
                 StackViewItem(view: adBodyLbl, attribute: .fill(insets: .zero)),
                 actionLayout
             ])
+        mainLayout.isUserInteractionEnabled = false
         addSubview(mainLayout)
         mainLayout.autoPinEdgesToSuperviewEdges()
     }

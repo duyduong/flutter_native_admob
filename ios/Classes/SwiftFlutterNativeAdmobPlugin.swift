@@ -10,6 +10,7 @@ public class SwiftFlutterNativeAdmobPlugin: NSObject, FlutterPlugin {
     
     enum CallMethod: String {
         case initController
+        case disposeController
     }
     
     let messenger: FlutterBinaryMessenger
@@ -38,6 +39,11 @@ public class SwiftFlutterNativeAdmobPlugin: NSObject, FlutterPlugin {
         case .initController:
             if let controllerID = params?["controllerID"] as? String {
                 controllerManager.createController(forID: controllerID, binaryMessenger: messenger)
+            }
+            
+        case .disposeController:
+            if let controllerID = params?["controllerID"] as? String {
+                controllerManager.removeController(forID: controllerID)
             }
         }
         

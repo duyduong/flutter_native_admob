@@ -22,3 +22,7 @@ Major updates
 ## 2.0.0+2
 
 Fix iOS and Android layout and some elements that is not applied for the style
+
+## 2.0.0+3
+
+Allow to dispose admob controller for better memory

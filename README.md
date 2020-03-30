@@ -78,6 +78,7 @@ In your app's Info.plist file, add this
 | loading    | A widget to show when the ad is loading           | Widget                |
 | error      | A widget to show when the ad got error            | Widget                |
 | options    | Native ad styling options                         | NativeAdmobOptions    |
+| type       | Native ad type (banner or full)                   | NativeAdmobType.full  |
 | controller | Controller for controlling the NativeAdmob widget | NativeAdmobController |
 
 #### `NativeAdmobOptions`
@@ -96,11 +97,12 @@ In your app's Info.plist file, add this
 
 #### `NativeTextStyle`
 
-| Property        | Description      | Type   |
-| :-------------- | :--------------- | :----- |
-| fontSize        | Text font size   | double |
-| color           | Text color       | Color  |
-| backgroundColor | Background color | Color  |
+| Property        | Description            | Type   |
+| :-------------- | :--------------------- | :----- |
+| fontSize        | Text font size         | double |
+| color           | Text color             | Color  |
+| backgroundColor | Background color       | Color  |
+| isVisible       | Whether to show or not | bool   |
 
 #### `NativeAdmobController`
 
@@ -120,7 +122,7 @@ NativeAdmob(
 )
 ```
 
-### Using controller, loading, error widget and options
+### Using controller, loading, error widget, type and options
 
 ```dart
 final _controller = NativeAdmobController();
@@ -130,6 +132,7 @@ NativeAdmob(
   loading: Center(child: CircularProgressIndicator()),
   error: Text("Failed to load the ad"),
   controller: _controller,
+  type: NativeAdmobType.full,
   options: NativeAdmobOptions(
     ratingColor: Colors.red,
     // Others ...

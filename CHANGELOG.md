@@ -26,3 +26,8 @@ Fix iOS and Android layout and some elements that is not applied for the style
 ## 2.0.0+3
 
 Allow to dispose admob controller for better memory
+
+## 2.1.0
+
+- Allow to show/hide in `NativeTextStyle`
+- Add `NativeAdmobType` that allows to change the ad layout

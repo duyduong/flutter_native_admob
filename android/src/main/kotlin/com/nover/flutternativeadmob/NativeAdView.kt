@@ -12,8 +12,13 @@ import com.google.android.gms.ads.formats.MediaView
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 
+enum class NativeAdmobType {
+  full, banner
+}
+
 class NativeAdView @JvmOverloads constructor(
     context: Context,
+    type: NativeAdmobType,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
@@ -28,19 +33,23 @@ class NativeAdView @JvmOverloads constructor(
 
   private val ratingBar: RatingBar
 
-  private val adMedia: MediaView
+  private val adMedia: MediaView?
 
   private val adHeadline: TextView
   private val adAdvertiser: TextView
-  private val adBody: TextView
-  private val adPrice: TextView
-  private val adStore: TextView
+  private val adBody: TextView?
+  private val adPrice: TextView?
+  private val adStore: TextView?
   private val adAttribution: TextView
   private val callToAction: Button
 
   init {
     val inflater = LayoutInflater.from(context)
-    inflater.inflate(R.layout.native_admob_banner_view, this, true)
+    val layout = when (type) {
+      NativeAdmobType.full -> R.layout.native_admob_full_view
+      NativeAdmobType.banner -> R.layout.native_admob_banner_view
+    }
+    inflater.inflate(layout, this, true)
 
     setBackgroundColor(Color.TRANSPARENT)
 
@@ -83,11 +92,11 @@ class NativeAdView @JvmOverloads constructor(
     if (nativeAd == null) return
 
     // Some assets are guaranteed to be in every UnifiedNativeAd.
-    adMedia.setMediaContent(nativeAd.mediaContent)
-    adMedia.setImageScaleType(ImageView.ScaleType.FIT_CENTER)
+    adMedia?.setMediaContent(nativeAd.mediaContent)
+    adMedia?.setImageScaleType(ImageView.ScaleType.FIT_CENTER)
 
     adHeadline.text = nativeAd.headline
-    adBody.text = nativeAd.body
+    adBody?.text = nativeAd.body
     (adView.callToActionView as Button).text = nativeAd.callToAction
 
     // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
@@ -102,17 +111,16 @@ class NativeAdView @JvmOverloads constructor(
     }
 
     if (nativeAd.price == null) {
-      adPrice.visibility = View.INVISIBLE
+      adPrice?.visibility = View.INVISIBLE
     } else {
-      adPrice.visibility = View.VISIBLE
-      adPrice.text = nativeAd.price
+      adPrice?.visibility = View.VISIBLE
+      adPrice?.text = nativeAd.price
     }
 
     if (nativeAd.store == null) {
-      adStore.visibility = View.INVISIBLE
+      adStore?.visibility = View.INVISIBLE
     } else {
-      adStore.visibility = View.VISIBLE
-      adStore.text = nativeAd.store
+      adStore?.text = nativeAd.store
     }
 
     if (nativeAd.starRating == null) {
@@ -134,7 +142,7 @@ class NativeAdView @JvmOverloads constructor(
   }
 
   private fun updateOptions() {
-    adMedia.visibility = if (options.showMediaContent) View.VISIBLE else View.GONE
+    adMedia?.visibility = if (options.showMediaContent) View.VISIBLE else View.GONE
 
     ratingBar.progressDrawable
         .setColorFilter(options.ratingColor, PorterDuff.Mode.SRC_ATOP)
@@ -144,21 +152,27 @@ class NativeAdView @JvmOverloads constructor(
     }
     adAttribution.textSize = options.adLabelTextStyle.fontSize
     adAttribution.setTextColor(options.adLabelTextStyle.color)
+    adAdvertiser.visibility = options.adLabelTextStyle.visibility
 
     adHeadline.setTextColor(options.headlineTextStyle.color)
     adHeadline.textSize = options.headlineTextStyle.fontSize
+    adHeadline.visibility = options.headlineTextStyle.visibility
 
     adAdvertiser.setTextColor(options.advertiserTextStyle.color)
     adAdvertiser.textSize = options.advertiserTextStyle.fontSize
+    adAdvertiser.visibility = options.advertiserTextStyle.visibility
 
-    adBody.setTextColor(options.bodyTextStyle.color)
-    adBody.textSize = options.bodyTextStyle.fontSize
+    adBody?.setTextColor(options.bodyTextStyle.color)
+    adBody?.textSize = options.bodyTextStyle.fontSize
+    adBody?.visibility = options.bodyTextStyle.visibility
 
-    adStore.setTextColor(options.storeTextStyle.color)
-    adStore.textSize = options.storeTextStyle.fontSize
+    adStore?.setTextColor(options.storeTextStyle.color)
+    adStore?.textSize = options.storeTextStyle.fontSize
+    adStore?.visibility = options.storeTextStyle.visibility
 
-    adPrice.setTextColor(options.priceTextStyle.color)
-    adPrice.textSize = options.priceTextStyle.fontSize
+    adPrice?.setTextColor(options.priceTextStyle.color)
+    adPrice?.textSize = options.priceTextStyle.fontSize
+    adPrice?.visibility = options.priceTextStyle.visibility
 
     callToAction.setTextColor(options.callToActionStyle.color)
     callToAction.textSize = options.callToActionStyle.fontSize

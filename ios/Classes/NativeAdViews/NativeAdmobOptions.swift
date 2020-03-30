@@ -29,7 +29,6 @@ struct NativeAdmobOptions {
             }
             
             if let isVisible = JSON["isVisible"] as? Bool {
-                print("======= isVisible", isVisible)
                 self.isVisible = isVisible
             }
         }

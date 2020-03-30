@@ -76,10 +76,18 @@ class NativePlatformView(
 ) : PlatformView {
 
   private var controller: NativeAdmobController? = null
-  private val view = NativeAdView(context)
+  private val view: NativeAdView
 
   init {
     val map = params as HashMap<*, *>
+
+    var type = NativeAdmobType.full
+    (map["type"] as? String)?.let {
+      type = NativeAdmobType.valueOf(it)
+    }
+
+    view = NativeAdView(context, type)
+
     (map["controllerID"] as? String)?.let { id ->
       val controller = NativeAdmobControllerManager.getController(id)
       controller?.nativeAdChanged = { view.setNativeAd(it) }

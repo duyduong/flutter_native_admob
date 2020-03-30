@@ -1,11 +1,14 @@
 package com.nover.flutternativeadmob
 
 import android.graphics.Color
+import android.opengl.Visibility
+import android.view.View
 
 class NativeTextStyle(
     var fontSize: Float,
     var color: Int,
-    var backgroundColor: Int? = null
+    var backgroundColor: Int? = null,
+    var visibility: Int = View.VISIBLE
 ) {
   fun update(data: HashMap<*, *>) {
     (data["fontSize"] as? Float)?.let {
@@ -18,6 +21,10 @@ class NativeTextStyle(
 
     (data["backgroundColor"] as? String)?.let {
       backgroundColor = Color.parseColor(it)
+    }
+
+    (data["isVisible"] as? Boolean)?.let {
+      visibility = if (it) View.VISIBLE else View.GONE
     }
   }
 }

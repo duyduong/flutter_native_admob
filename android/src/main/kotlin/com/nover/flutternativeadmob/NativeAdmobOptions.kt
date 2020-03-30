@@ -1,7 +1,6 @@
 package com.nover.flutternativeadmob
 
 import android.graphics.Color
-import android.opengl.Visibility
 import android.view.View
 
 class NativeTextStyle(

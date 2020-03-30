@@ -83,10 +83,36 @@ class _MyAppState extends State<MyApp> {
                 // Your ad unit id
                 adUnitID: _adUnitID,
                 controller: _nativeAdController,
+                templateSize: NativeAdmobTemplateSize.medium,
 
                 // Don't show loading widget when in loading state
                 loading: Container(),
               ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20.0),
+              height: 200.0,
+              color: Colors.green,
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20.0),
+              height: 200.0,
+              color: Colors.green,
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20.0),
+              height: 200.0,
+              color: Colors.green,
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20.0),
+              height: 200.0,
+              color: Colors.green,
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20.0),
+              height: 200.0,
+              color: Colors.green,
             ),
             Container(
               margin: EdgeInsets.only(bottom: 20.0),

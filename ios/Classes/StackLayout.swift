@@ -167,7 +167,7 @@ protocol StackItem {
  StackViewItem(view: logoView, attribute: .centerX)
  ```
  */
-struct StackViewItem: StackItem {
+class StackViewItem: UIView, StackItem {
     
     enum Attribute {
         /// Align left with insets
@@ -196,11 +196,13 @@ struct StackViewItem: StackItem {
     init(view: UIView, constraintsDefinition: @escaping ((UIView) -> ())) {
         self.originalView = view
         self.constraintsDefinition = constraintsDefinition
+        super.init(frame: .zero)
     }
     
     /// Constructor with custom attribute
     init(view: UIView, attribute: Attribute) {
-        self.init(view: view) { (view) in
+        self.originalView = view
+        self.constraintsDefinition = { (view) in
             switch attribute {
             case .leading(let insets):
                 view.autoPinEdgesToSuperviewEdges(with: insets, excludingEdge: .trailing)
@@ -229,14 +231,17 @@ struct StackViewItem: StackItem {
                 view.autoPinEdgesToSuperviewEdges(with: insets)
             }
         }
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func build(with layout: StackLayout) -> UIView {
-        let wrapperView = UIView()
-        wrapperView.addSubview(originalView)
+        addSubview(originalView)
         constraintsDefinition(originalView)
-        
-        return wrapperView
+        return self
     }
 }
 

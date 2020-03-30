@@ -4,11 +4,13 @@ class NativeTextStyle {
   final double fontSize;
   final Color color;
   final Color backgroundColor;
+  final bool isVisible;
 
   const NativeTextStyle({
     this.fontSize,
     this.color,
     this.backgroundColor,
+    this.isVisible = true,
   });
 
   Map<String, dynamic> toJson() => {
@@ -17,6 +19,7 @@ class NativeTextStyle {
             : null,
         "fontSize": fontSize,
         "color": color != null ? "#${color.value.toRadixString(16)}" : null,
+        "isVisible": isVisible,
       };
 }
 

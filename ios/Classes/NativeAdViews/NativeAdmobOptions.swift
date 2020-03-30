@@ -13,6 +13,7 @@ struct NativeAdmobOptions {
         var fontSize: CGFloat
         var color: UIColor
         var backgroundColor: UIColor? = nil
+        var isVisible: Bool = true
         
         mutating func update(JSON: [String: Any]) {
             if let fontSize = JSON["fontSize"] as? CGFloat {
@@ -25,6 +26,11 @@ struct NativeAdmobOptions {
             
             if let backgroundColorString = JSON["backgroundColor"] as? String {
                 self.backgroundColor = .fromHex(backgroundColorString)
+            }
+            
+            if let isVisible = JSON["isVisible"] as? Bool {
+                print("======= isVisible", isVisible)
+                self.isVisible = isVisible
             }
         }
     }

@@ -9,9 +9,12 @@ import 'native_admob_options.dart';
 
 const _viewType = "native_admob";
 
+enum NativeAdmobTemplateSize { small, medium }
+
 class NativeAdmob extends StatefulWidget {
   final String adUnitID;
   final NativeAdmobOptions options;
+  final NativeAdmobTemplateSize templateSize;
 
   final Widget loading;
   final Widget error;
@@ -25,6 +28,7 @@ class NativeAdmob extends StatefulWidget {
     this.loading,
     this.error,
     this.controller,
+    this.templateSize = NativeAdmobTemplateSize.medium,
   })  : assert(adUnitID.isNotEmpty),
         super(key: key);
 
@@ -39,6 +43,8 @@ class _NativeAdmobState extends State<NativeAdmob> {
   NativeAdmobController _nativeAdController;
 
   NativeAdmobOptions get _options => widget.options ?? NativeAdmobOptions();
+  NativeAdmobTemplateSize get _templateSize =>
+      widget.templateSize ?? NativeAdmobTemplateSize.medium;
 
   Widget get _loading =>
       widget.loading ?? Center(child: CircularProgressIndicator());
@@ -65,7 +71,9 @@ class _NativeAdmobState extends State<NativeAdmob> {
   @override
   void dispose() {
     _subscription.cancel();
-    _nativeAdController.dispose();
+
+    // We only dispose internal controller, external controller will be kept
+    if (widget.controller == null) _nativeAdController.dispose();
     super.dispose();
   }
 
@@ -87,7 +95,9 @@ class _NativeAdmobState extends State<NativeAdmob> {
   Widget _createPlatformView() {
     final creationParams = {
       "options": _options.toJson(),
-      "controllerID": _nativeAdController.id
+      "controllerID": _nativeAdController.id,
+      "templateSize":
+          _templateSize.toString().replaceAll("NativeAdmobTemplateSize.", ""),
     };
 
     return isAndroid

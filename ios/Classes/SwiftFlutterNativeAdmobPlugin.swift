@@ -70,12 +70,12 @@ class PlatformView: NSObject, FlutterPlatformView {
     private let params: [String: Any]
     
     init(_ frame: CGRect, viewId: Int64, args: Any?) {
-        var templateSize: NativeAdmobTemplateSize?
-        if let templateSizeValue = (args as? [String: Any])?["templateSize"] as? String {
-            templateSize = NativeAdmobTemplateSize(rawValue: templateSizeValue)
+        var type: NativeAdmobType?
+        if let typeValue = (args as? [String: Any])?["type"] as? String {
+            type = NativeAdmobType(rawValue: typeValue)
         }
         
-        nativeAdView = NativeAdView(frame: frame, templateSize: templateSize ?? .medium)
+        nativeAdView = NativeAdView(frame: frame, type: type ?? .full)
         params = args as? [String: Any] ?? [:]
         
         super.init()

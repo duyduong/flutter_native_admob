@@ -9,12 +9,12 @@ import 'native_admob_options.dart';
 
 const _viewType = "native_admob";
 
-enum NativeAdmobTemplateSize { small, medium }
+enum NativeAdmobType { banner, full }
 
 class NativeAdmob extends StatefulWidget {
   final String adUnitID;
   final NativeAdmobOptions options;
-  final NativeAdmobTemplateSize templateSize;
+  final NativeAdmobType type;
 
   final Widget loading;
   final Widget error;
@@ -28,7 +28,7 @@ class NativeAdmob extends StatefulWidget {
     this.loading,
     this.error,
     this.controller,
-    this.templateSize = NativeAdmobTemplateSize.medium,
+    this.type = NativeAdmobType.full,
   })  : assert(adUnitID.isNotEmpty),
         super(key: key);
 
@@ -43,8 +43,7 @@ class _NativeAdmobState extends State<NativeAdmob> {
   NativeAdmobController _nativeAdController;
 
   NativeAdmobOptions get _options => widget.options ?? NativeAdmobOptions();
-  NativeAdmobTemplateSize get _templateSize =>
-      widget.templateSize ?? NativeAdmobTemplateSize.medium;
+  NativeAdmobType get _type => widget.type ?? NativeAdmobType.full;
 
   Widget get _loading =>
       widget.loading ?? Center(child: CircularProgressIndicator());
@@ -96,8 +95,7 @@ class _NativeAdmobState extends State<NativeAdmob> {
     final creationParams = {
       "options": _options.toJson(),
       "controllerID": _nativeAdController.id,
-      "templateSize":
-          _templateSize.toString().replaceAll("NativeAdmobTemplateSize.", ""),
+      "type": _type.toString().replaceAll("NativeAdmobType.", ""),
     };
 
     return isAndroid

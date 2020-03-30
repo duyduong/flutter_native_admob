@@ -8,13 +8,11 @@
 import UIKit
 import GoogleMobileAds
 
-enum NativeAdmobTemplateSize: String {
-    case small, medium
+enum NativeAdmobType: String {
+    case banner, full
 }
 
 class NativeAdView: GADUnifiedNativeAdView {
-    
-    let containerView = UIView()
     
     let adLabelLbl: UILabel = {
         let label = UILabel()
@@ -103,10 +101,10 @@ class NativeAdView: GADUnifiedNativeAdView {
         didSet { updateOptions() }
     }
     
-    let templateSize: NativeAdmobTemplateSize
+    let type: NativeAdmobType
     
-    init(frame: CGRect, templateSize: NativeAdmobTemplateSize) {
-        self.templateSize = templateSize
+    init(frame: CGRect, type: NativeAdmobType) {
+        self.type = type
         super.init(frame: frame)
         setupView()
     }
@@ -185,20 +183,13 @@ private extension NativeAdView {
         self.starRatingView = adRatingView
         self.advertiserView = adAdvertiserLbl
         
-        addSubview(containerView)
-        containerView.autoAlignAxis(toSuperviewAxis: .horizontal)
-        containerView.autoPinEdge(toSuperviewEdge: .leading)
-        containerView.autoPinEdge(toSuperviewEdge: .trailing)
-        containerView.autoPinEdge(toSuperviewEdge: .top, withInset: 0, relation: .greaterThanOrEqual)
-        containerView.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0, relation: .greaterThanOrEqual)
-        
-        switch templateSize {
-        case .medium: setupMediumLayout()
-        case .small: setupSmallLayout()
+        switch type {
+        case .full: setupFullLayout()
+        case .banner: setupBannerLayout()
         }
     }
     
-    func setupMediumLayout() {
+    func setupFullLayout() {
         adBodyLbl.numberOfLines = 2
         
         let infoLayout = StackLayout().spacing(5).children([
@@ -225,6 +216,7 @@ private extension NativeAdView {
             ])
         
         adBodyLbl.autoSetDimension(.height, toSize: 20, relation: .greaterThanOrEqual)
+        adLabelLbl.autoSetDimension(.height, toSize: 15, relation: .greaterThanOrEqual)
         
         addSubview(adLabelView)
         adLabelView.autoPinEdge(toSuperviewEdge: .top)
@@ -253,10 +245,11 @@ private extension NativeAdView {
         layout.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0, relation: .greaterThanOrEqual)
     }
     
-    func setupSmallLayout() {
+    func setupBannerLayout() {
         adBodyLbl.numberOfLines = 2
         
         callToActionBtn.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        adLabelLbl.autoSetDimension(.height, toSize: 15, relation: .greaterThanOrEqual)
         
         addSubview(adLabelView)
         adLabelView.autoPinEdge(toSuperviewEdge: .top)

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'mobile_ad_targeting_info.dart';
+
 enum AdLoadState { loading, loadError, loadCompleted }
 
 class NativeAdmobController {
@@ -50,10 +52,11 @@ class NativeAdmobController {
   }
 
   /// Change the ad unit ID
-  void setAdUnitID(String adUnitID) {
+  void loadAd(String adUnitID, MobileAdTargetingInfo mobileAdTargetingInfo) {
     _adUnitID = adUnitID;
-    _channel.invokeMethod("setAdUnitID", {
+    _channel.invokeMethod("initAd", {
       "adUnitID": adUnitID,
+      "keywords": mobileAdTargetingInfo.keywords
     });
   }
 

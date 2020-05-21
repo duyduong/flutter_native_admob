@@ -10,7 +10,7 @@ import GoogleMobileAds
 class NativeAdmobController: NSObject {
     
     enum CallMethod: String {
-        case setAdUnitID
+        case initAd
         case reloadAd
     }
     
@@ -42,7 +42,7 @@ class NativeAdmobController: NSObject {
         let params = call.arguments as? [String: Any]
         
         switch callMethod {
-        case .setAdUnitID:
+        case .initAd:
             guard let adUnitID = params?["adUnitID"] as? String else {
                 return result(nil)
             }

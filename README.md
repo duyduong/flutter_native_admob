@@ -109,7 +109,7 @@ In your app's Info.plist file, add this
 | Property/Function                          | Description                                                                         | Type                |
 | :----------------------------------------- | :---------------------------------------------------------------------------------- | :------------------ |
 | stateChanged                               | Stream that notify each time the loading state changed                              | Stream<AdLoadState> |
-| void setAdUnitID(String adUnitID)          | Change the ad unit ID, it will load the ad again if the id is changed from previous |                     |
+| void initAd(String adUnitID)          | Change the ad unit ID, it will load the ad again if the id is changed from previous |                     |
 | void reloadAd({bool forceRefresh = false}) | Reload the ad                                                                       |                     |
 
 ## Examples

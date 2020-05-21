@@ -15,6 +15,7 @@ class NativeAdmob extends StatefulWidget {
   final String adUnitID;
   final NativeAdmobOptions options;
   final NativeAdmobType type;
+  final MobileAdTargetingInfo mobileAdTargetingInfo;
 
   final Widget loading;
   final Widget error;
@@ -24,6 +25,7 @@ class NativeAdmob extends StatefulWidget {
   NativeAdmob({
     Key key,
     @required this.adUnitID,
+    this.mobileAdTargetingInfo
     this.options,
     this.loading,
     this.error,
@@ -56,7 +58,7 @@ class _NativeAdmobState extends State<NativeAdmob> {
   @override
   void initState() {
     _nativeAdController = widget.controller ?? NativeAdmobController();
-    _nativeAdController.setAdUnitID(widget.adUnitID);
+    _nativeAdController.init(widget.adUnitID,widget.mobileAdTargetingInfo);
 
     _subscription = _nativeAdController.stateChanged.listen((state) {
       setState(() {

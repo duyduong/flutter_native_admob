@@ -17,7 +17,7 @@ class NativeAdmobController(
 ) : MethodChannel.MethodCallHandler {
 
   enum class CallMethod {
-    setAdUnitID, reloadAd
+    initAd, reloadAd
   }
 
   enum class LoadState {
@@ -40,7 +40,7 @@ class NativeAdmobController(
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (CallMethod.valueOf(call.method)) {
-      CallMethod.setAdUnitID -> {
+      CallMethod.initAd -> {
         call.argument<String>("adUnitID")?.let {
           val isChanged = adUnitID != it
           adUnitID = it

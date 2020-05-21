@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'mobile_ad_targeting_info.dart';
 import 'native_admob_controller.dart';
 import 'native_admob_options.dart';
 
@@ -25,7 +26,7 @@ class NativeAdmob extends StatefulWidget {
   NativeAdmob({
     Key key,
     @required this.adUnitID,
-    this.mobileAdTargetingInfo
+    this.mobileAdTargetingInfo,
     this.options,
     this.loading,
     this.error,
@@ -58,7 +59,7 @@ class _NativeAdmobState extends State<NativeAdmob> {
   @override
   void initState() {
     _nativeAdController = widget.controller ?? NativeAdmobController();
-    _nativeAdController.init(widget.adUnitID,widget.mobileAdTargetingInfo);
+    _nativeAdController.loadAd(widget.adUnitID,widget.mobileAdTargetingInfo);
 
     _subscription = _nativeAdController.stateChanged.listen((state) {
       setState(() {

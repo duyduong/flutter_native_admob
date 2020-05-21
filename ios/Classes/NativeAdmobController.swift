@@ -27,7 +27,8 @@ class NativeAdmobController: NSObject {
     }
     
     private var adLoader: GADAdLoader?
-    private var adUnitID: String?
+    private var adRequest: GADRequest?
+private var adUnitID: String?
     
     init(id: String, channel: FlutterMethodChannel) {
         self.id = id
@@ -47,6 +48,8 @@ class NativeAdmobController: NSObject {
                 return result(nil)
             }
             
+            let keywords = params?["keywords"] as? Array<String>
+            
             let isChanged = adUnitID != self.adUnitID
             self.adUnitID = adUnitID
             
@@ -56,7 +59,9 @@ class NativeAdmobController: NSObject {
             }
             
             if nativeAd == nil || isChanged {
-                loadAd()
+                adRequest = GADRequest()
+                adRequest?.keywords = keywords;
+                loadAd(adRequest: adRequest!)
             } else {
                 invokeLoadCompleted()
             }
@@ -64,7 +69,7 @@ class NativeAdmobController: NSObject {
         case .reloadAd:
             let forceRefresh = params?["forceRefresh"] as? Bool ?? false
             if forceRefresh || nativeAd == nil {
-                loadAd()
+                loadAd(adRequest: adRequest!)
             } else {
                 invokeLoadCompleted()
             }
@@ -73,9 +78,9 @@ class NativeAdmobController: NSObject {
         result(nil)
     }
     
-    private func loadAd() {
+    private func loadAd(adRequest: GADRequest) {
         channel.invokeMethod(LoadState.loading.rawValue, arguments: nil)
-        adLoader?.load(GADRequest())
+        adLoader?.load(adRequest)
     }
     
     private func invokeLoadCompleted() {

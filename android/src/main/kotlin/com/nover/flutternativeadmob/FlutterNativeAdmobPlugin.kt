@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.view.View
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -17,13 +17,14 @@ import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 
+
 class FlutterNativeAdmobPlugin(
     private val context: Context,
     private val messenger: BinaryMessenger
 ) : MethodCallHandler {
 
   enum class CallMethod {
-    initController, disposeController
+    initController, disposeController, setTestDeviceIds
   }
 
   companion object {
@@ -56,6 +57,13 @@ class FlutterNativeAdmobPlugin(
       CallMethod.disposeController -> {
         (call.argument<String>("controllerID"))?.let {
           NativeAdmobControllerManager.removeController(it)
+        }
+      }
+
+      CallMethod.setTestDeviceIds -> {
+        (call.argument<List<String>>("testDeviceIds"))?.let {
+          val configuration = RequestConfiguration.Builder().setTestDeviceIds(it).build()
+          MobileAds.setRequestConfiguration(configuration)
         }
       }
     }

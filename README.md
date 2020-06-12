@@ -127,7 +127,7 @@ NativeAdmob(
 ```dart
 final _controller = NativeAdmobController();
 
-// Optional: enter your test devide ids here
+// Optional: enter your test device ids here
 _controller.setTestDeviceIds([
   "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"

@@ -126,6 +126,10 @@ NativeAdmob(
 
 ```dart
 final _controller = NativeAdmobController();
+_controller.setTestDeviceIds([
+  "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
+]);
 
 NativeAdmob(
   adUnitID: "<Your ad unit ID>",

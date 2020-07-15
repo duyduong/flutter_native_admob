@@ -67,4 +67,13 @@ class NativeAdmobController {
       "forceRefresh": forceRefresh,
     });
   }
+
+
+  void setTestDeviceIds(List<String> ids){
+    if (ids == null || ids.isEmpty) return;
+
+    _pluginChannel.invokeMethod("setTestDeviceIds", {
+      "testDeviceIds": ids,
+    });
+  }
 }

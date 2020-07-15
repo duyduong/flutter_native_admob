@@ -11,6 +11,7 @@ public class SwiftFlutterNativeAdmobPlugin: NSObject, FlutterPlugin {
     enum CallMethod: String {
         case initController
         case disposeController
+        case setTestDeviceIds
     }
     
     let messenger: FlutterBinaryMessenger
@@ -44,6 +45,11 @@ public class SwiftFlutterNativeAdmobPlugin: NSObject, FlutterPlugin {
         case .disposeController:
             if let controllerID = params?["controllerID"] as? String {
                 controllerManager.removeController(forID: controllerID)
+            }
+
+        case .setTestDeviceIds:
+            if let testDeviceIds = params?["testDeviceIds"] as? [String] {
+                GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = testDeviceIds
             }
         }
         

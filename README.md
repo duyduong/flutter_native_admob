@@ -127,6 +127,12 @@ NativeAdmob(
 ```dart
 final _controller = NativeAdmobController();
 
+// Optional: enter your test device ids here
+_controller.setTestDeviceIds([
+  "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
+]);
+
 NativeAdmob(
   adUnitID: "<Your ad unit ID>",
   loading: Center(child: CircularProgressIndicator()),

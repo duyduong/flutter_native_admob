@@ -57,6 +57,13 @@ class NativeAdmobController {
     });
   }
 
+  /// Set the option to disable the personalized Ads
+  void setNonPersonalizedAds(bool nonPersonalizedAds) {
+    _channel.invokeMethod("setNonPersonalizedAds", {
+      "nonPersonalizedAds": nonPersonalizedAds,
+    });
+  }
+
   /// Reload new ad with specific native ad id
   ///
   ///  * [forceRefresh], force reload a new ad or using cache ad

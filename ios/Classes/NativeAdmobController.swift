@@ -12,6 +12,7 @@ class NativeAdmobController: NSObject {
     enum CallMethod: String {
         case setAdUnitID
         case reloadAd
+        case setNonPersonalizedAds
     }
     
     enum LoadState: String {
@@ -28,6 +29,7 @@ class NativeAdmobController: NSObject {
     
     private var adLoader: GADAdLoader?
     private var adUnitID: String?
+    private var nonPersonalizedAds: Bool = false
     
     init(id: String, channel: FlutterMethodChannel) {
         self.id = id
@@ -68,6 +70,12 @@ class NativeAdmobController: NSObject {
             } else {
                 invokeLoadCompleted()
             }
+            
+        case .setNonPersonalizedAds:
+            if let nonPersonalizedAds = params?["nonPersonalizedAds"] as? Bool {
+                self.nonPersonalizedAds = nonPersonalizedAds
+            }
+            return result(nil)
         }
         
         result(nil)
@@ -75,7 +83,13 @@ class NativeAdmobController: NSObject {
     
     private func loadAd() {
         channel.invokeMethod(LoadState.loading.rawValue, arguments: nil)
-        adLoader?.load(GADRequest())
+        let request = GADRequest()
+        if self.nonPersonalizedAds {
+            let extras = GADExtras()
+            extras.additionalParameters = ["npa": "1"]
+            request.register(extras)
+        }
+        adLoader?.load(request)
     }
     
     private func invokeLoadCompleted() {

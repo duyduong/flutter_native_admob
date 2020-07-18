@@ -111,6 +111,8 @@ In your app's Info.plist file, add this
 | stateChanged                               | Stream that notify each time the loading state changed                              | Stream<AdLoadState> |
 | void setAdUnitID(String adUnitID)          | Change the ad unit ID, it will load the ad again if the id is changed from previous |                     |
 | void reloadAd({bool forceRefresh = false}) | Reload the ad                                                                       |                     |
+| void setTestDeviceIds(List<String> ids)    | Add your test devices                                                               |                     |
+| void setNonPersonalizedAds(bool nonPersAds)| Set the option to disable the personalized Ads. AdMob default option: personalized  |                     |
 
 ## Examples
 
@@ -132,6 +134,9 @@ _controller.setTestDeviceIds([
   "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
 ]);
+
+// Optional: Set the option to disable the personalized Ads. AdMob default option: personalized
+_controller.setNonPersonalizedAds(true);
 
 NativeAdmob(
   adUnitID: "<Your ad unit ID>",

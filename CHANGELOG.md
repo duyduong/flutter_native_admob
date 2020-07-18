@@ -35,3 +35,7 @@ Allow to dispose admob controller for better memory
 ## 2.1.0+1
 
 Add setTestDeviceIds() to NativeAdmobController
+
+## 2.1.0+2
+
+Add setNonPersonalizedAds() to NativeAdmobController

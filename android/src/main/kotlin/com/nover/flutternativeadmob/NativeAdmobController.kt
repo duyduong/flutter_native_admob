@@ -1,7 +1,9 @@
 package com.nover.flutternativeadmob
 
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
+import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -17,7 +19,7 @@ class NativeAdmobController(
 ) : MethodChannel.MethodCallHandler {
 
   enum class CallMethod {
-    setAdUnitID, reloadAd
+    setAdUnitID, reloadAd, setNonPersonalizedAds
   }
 
   enum class LoadState {
@@ -33,6 +35,7 @@ class NativeAdmobController(
 
   private var adLoader: AdLoader? = null
   private var adUnitID: String? = null
+  private var nonPersonalizedAds = false
 
   init {
     channel.setMethodCallHandler(this)
@@ -66,12 +69,26 @@ class NativeAdmobController(
           if (it || nativeAd == null) loadAd() else invokeLoadCompleted()
         }
       }
+
+      CallMethod.setNonPersonalizedAds -> {
+        call.argument<Boolean>("nonPersonalizedAds")?.let {
+          nonPersonalizedAds = it
+        }
+        result.success(null)
+      }
     }
   }
 
   private fun loadAd() {
     channel.invokeMethod(LoadState.loading.toString(), null)
-    adLoader?.loadAd(AdRequest.Builder().build())
+    val requestBuilder: AdRequest.Builder = AdRequest.Builder()
+    if(nonPersonalizedAds){
+      val extras = Bundle().apply {
+        putString("npa", "1")
+      }
+      requestBuilder.addNetworkExtrasBundle(AdMobAdapter::class.java, extras)
+    }
+    adLoader?.loadAd(requestBuilder.build())
   }
 
   private fun invokeLoadCompleted() {

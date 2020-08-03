@@ -92,14 +92,12 @@ class NativeAdmobController(
       }
       requestBuilder.addNetworkExtrasBundle(AdMobAdapter::class.java, extras)
     }
-    android.util.Log.v("XXXXXXXX", "11111 loadAd: numberAdsStr = " + numberAdsStr)
     var numberAds: Int = 1;
     if(numberAdsStr != null){
       try {
         numberAds = numberAdsStr.toInt()
       } catch (nfe: NumberFormatException) {}
     }
-    android.util.Log.v("XXXXXXXX", "22222 loadAd: numberAds = " + numberAds)
     if(numberAds != null && numberAds > 1){
       adLoader?.loadAds(requestBuilder.build(), numberAds)
     } else {

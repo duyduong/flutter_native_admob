@@ -15,6 +15,7 @@ class NativeAdmob extends StatefulWidget {
   final String adUnitID;
   final NativeAdmobOptions options;
   final NativeAdmobType type;
+  final int numberAds;
 
   final Widget loading;
   final Widget error;
@@ -28,6 +29,7 @@ class NativeAdmob extends StatefulWidget {
     this.loading,
     this.error,
     this.controller,
+    this.numberAds = 1,
     this.type = NativeAdmobType.full,
   })  : assert(adUnitID.isNotEmpty),
         super(key: key);
@@ -56,7 +58,7 @@ class _NativeAdmobState extends State<NativeAdmob> {
   @override
   void initState() {
     _nativeAdController = widget.controller ?? NativeAdmobController();
-    _nativeAdController.setAdUnitID(widget.adUnitID);
+    _nativeAdController.setAdUnitID(widget.adUnitID, numberAds: widget.numberAds);
 
     _subscription = _nativeAdController.stateChanged.listen((state) {
       setState(() {

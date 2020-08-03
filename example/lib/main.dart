@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
               child: NativeAdmob(
                 // Your ad unit id
                 adUnitID: _adUnitID,
+                numberAds: 3,
                 controller: _nativeAdController,
                 type: NativeAdmobType.banner,
               ),
@@ -96,11 +97,18 @@ class _MyAppState extends State<MyApp> {
               child: NativeAdmob(
                 // Your ad unit id
                 adUnitID: _adUnitID,
+                numberAds: 3,
                 controller: _nativeAdController,
                 type: NativeAdmobType.full,
               ),
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          label: Text("Refresh Ads"),
+          onPressed: () {
+            _nativeAdController.reloadAd(forceRefresh: true);
+          }
         ),
       ),
     );

@@ -51,10 +51,9 @@ class NativeAdmobController: NSObject {
             let isChanged = adUnitID != self.adUnitID
             self.adUnitID = adUnitID
             if adLoader == nil || isChanged {
-                let numberAdsStr = params?["numberAds"] as? String ?? "1"
-                let numberAds: Int = Int(numberAdsStr) as? Int ?? 1
+                let numberAds: Int = params?["numberAds"] as? Int ?? 1
                 let multipleAdsOptions = GADMultipleAdsAdLoaderOptions()
-                if numberAds > 1 {
+                if numberAds != nil && numberAds > 1 {
                     multipleAdsOptions.numberOfAds = numberAds
                 }
                 adLoader = GADAdLoader(

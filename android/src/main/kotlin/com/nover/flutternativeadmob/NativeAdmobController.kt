@@ -59,16 +59,16 @@ class NativeAdmobController(
               }
             }).build()
           }
-          var numberAds: String? = null
-          call.argument<String>("numberAds")?.let { numberAds = it }
+          var numberAds: Int? = 1
+          call.argument<Int>("numberAds")?.let { numberAds = it }
           if (nativeAd == null || isChanged) loadAd(numberAds) else invokeLoadCompleted()
         } ?: result.success(null)
       }
 
 
       CallMethod.reloadAd -> {
-        var numberAds: String? = null
-        call.argument<String>("numberAds")?.let { numberAds = it }
+        var numberAds: Int? = 1
+        call.argument<Int>("numberAds")?.let { numberAds = it }
         call.argument<Boolean>("forceRefresh")?.let {
           if (it || nativeAd == null) loadAd(numberAds) else invokeLoadCompleted()
         }
@@ -83,7 +83,7 @@ class NativeAdmobController(
     }
   }
 
-  private fun loadAd(numberAdsStr: String?) {
+  private fun loadAd(numberAds: Int?) {
     channel.invokeMethod(LoadState.loading.toString(), null)
     val requestBuilder: AdRequest.Builder = AdRequest.Builder()
     if(nonPersonalizedAds){
@@ -91,12 +91,6 @@ class NativeAdmobController(
         putString("npa", "1")
       }
       requestBuilder.addNetworkExtrasBundle(AdMobAdapter::class.java, extras)
-    }
-    var numberAds: Int = 1;
-    if(numberAdsStr != null){
-      try {
-        numberAds = numberAdsStr.toInt()
-      } catch (nfe: NumberFormatException) {}
     }
     if(numberAds != null && numberAds > 1){
       adLoader?.loadAds(requestBuilder.build(), numberAds)

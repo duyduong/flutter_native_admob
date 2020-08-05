@@ -54,7 +54,7 @@ class NativeAdmobController {
     _adUnitID = adUnitID;
     _channel.invokeMethod("setAdUnitID", {
       "adUnitID": adUnitID,
-      "numberAds": numberAds.toString()
+      "numberAds": numberAds
     });
   }
 
@@ -73,7 +73,7 @@ class NativeAdmobController {
 
     _channel.invokeMethod("reloadAd", {
       "forceRefresh": forceRefresh,
-      "numberAds": numberAds.toString()
+      "numberAds": numberAds
     });
   }
 

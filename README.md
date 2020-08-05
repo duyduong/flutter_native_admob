@@ -75,6 +75,7 @@ In your app's Info.plist file, add this
 | Property   | Description                                       | Type                  |
 | :--------- | :------------------------------------------------ | :-------------------- |
 | adUnitID   | Your ad unit ID to load                           | String                |
+| numberAds  | Number of ads to load                             | Int                   |
 | loading    | A widget to show when the ad is loading           | Widget                |
 | error      | A widget to show when the ad got error            | Widget                |
 | options    | Native ad styling options                         | NativeAdmobOptions    |
@@ -106,13 +107,13 @@ In your app's Info.plist file, add this
 
 #### `NativeAdmobController`
 
-| Property/Function                          | Description                                                                         | Type                |
-| :----------------------------------------- | :---------------------------------------------------------------------------------- | :------------------ |
-| stateChanged                               | Stream that notify each time the loading state changed                              | Stream<AdLoadState> |
-| void setAdUnitID(String adUnitID)          | Change the ad unit ID, it will load the ad again if the id is changed from previous |                     |
-| void reloadAd({bool forceRefresh = false}) | Reload the ad                                                                       |                     |
-| void setTestDeviceIds(List<String> ids)    | Add your test devices                                                               |                     |
-| void setNonPersonalizedAds(bool nonPersAds)| Set the option to disable the personalized Ads. AdMob default option: personalized  |                     |
+| Property/Function                                             | Description                                                                         | Type                |
+| :------------------------------------------------------------ | :---------------------------------------------------------------------------------- | :------------------ |
+| stateChanged                                                  | Stream that notify each time the loading state changed                              | Stream<AdLoadState> |
+| void setAdUnitID(String adUnitID)                             | Change the ad unit ID, it will load the ad again if the id is changed from previous |                     |
+| void reloadAd({bool forceRefresh = false, int numberAds = 1}) | Reload the ad with optionals number of ads                                          |                     |
+| void setTestDeviceIds(List<String> ids)                       | Add your test devices                                                               |                     |
+| void setNonPersonalizedAds(bool nonPersAds)                   | Set the option to disable the personalized Ads. AdMob default option: personalized  |                     |
 
 ## Examples
 

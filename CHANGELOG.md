@@ -39,3 +39,7 @@ Add setTestDeviceIds() to NativeAdmobController
 ## 2.1.0+2
 
 Add setNonPersonalizedAds() to NativeAdmobController
+
+## 2.1.0+3
+
+Allow to set number of ads when calling loadAds on NativeAdmobController

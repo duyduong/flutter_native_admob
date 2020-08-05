@@ -12,8 +12,10 @@ class NativeAdmobController {
   final _stateChanged = StreamController<AdLoadState>.broadcast();
   Stream<AdLoadState> get stateChanged => _stateChanged.stream;
 
-  final MethodChannel _pluginChannel =
-      const MethodChannel("flutter_native_admob");
+  /// Channel to communicate with plugin
+  final _pluginChannel = const MethodChannel("flutter_native_admob");
+
+  /// Channel to communicate with controller
   MethodChannel _channel;
   String _adUnitID;
 
@@ -50,11 +52,11 @@ class NativeAdmobController {
   }
 
   /// Change the ad unit ID
-  void setAdUnitID(String adUnitID, { int numberAds = 1 }) {
+  void setAdUnitID(String adUnitID, {int numberAds = 1}) {
     _adUnitID = adUnitID;
     _channel.invokeMethod("setAdUnitID", {
       "adUnitID": adUnitID,
-      "numberAds": numberAds
+      "numberAds": numberAds,
     });
   }
 
@@ -73,12 +75,11 @@ class NativeAdmobController {
 
     _channel.invokeMethod("reloadAd", {
       "forceRefresh": forceRefresh,
-      "numberAds": numberAds
+      "numberAds": numberAds,
     });
   }
 
-
-  void setTestDeviceIds(List<String> ids){
+  void setTestDeviceIds(List<String> ids) {
     if (ids == null || ids.isEmpty) return;
 
     _pluginChannel.invokeMethod("setTestDeviceIds", {

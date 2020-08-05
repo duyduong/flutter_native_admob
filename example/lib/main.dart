@@ -113,7 +113,7 @@ class _MyAppState extends State<MyApp> {
           label: Text("Refresh Ads"),
           onPressed: () {
             _nativeAdController.reloadAd(forceRefresh: true);
-          }
+          },
         ),
       ),
     );

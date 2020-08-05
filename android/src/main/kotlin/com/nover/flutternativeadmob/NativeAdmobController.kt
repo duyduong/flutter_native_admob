@@ -59,14 +59,18 @@ class NativeAdmobController(
               }
             }).build()
           }
-
-          if (nativeAd == null || isChanged) loadAd() else invokeLoadCompleted()
+          var numberAds: Int? = 1
+          call.argument<Int>("numberAds")?.let { numberAds = it }
+          if (nativeAd == null || isChanged) loadAd(numberAds) else invokeLoadCompleted()
         } ?: result.success(null)
       }
 
+
       CallMethod.reloadAd -> {
+        var numberAds: Int? = 1
+        call.argument<Int>("numberAds")?.let { numberAds = it }
         call.argument<Boolean>("forceRefresh")?.let {
-          if (it || nativeAd == null) loadAd() else invokeLoadCompleted()
+          if (it || nativeAd == null) loadAd(numberAds) else invokeLoadCompleted()
         }
       }
 
@@ -79,7 +83,7 @@ class NativeAdmobController(
     }
   }
 
-  private fun loadAd() {
+  private fun loadAd(numberAds: Int?) {
     channel.invokeMethod(LoadState.loading.toString(), null)
     val requestBuilder: AdRequest.Builder = AdRequest.Builder()
     if(nonPersonalizedAds){
@@ -88,7 +92,11 @@ class NativeAdmobController(
       }
       requestBuilder.addNetworkExtrasBundle(AdMobAdapter::class.java, extras)
     }
-    adLoader?.loadAd(requestBuilder.build())
+    if(numberAds != null && numberAds > 1){
+      adLoader?.loadAds(requestBuilder.build(), numberAds)
+    } else {
+      adLoader?.loadAd(requestBuilder.build())
+    }
   }
 
   private fun invokeLoadCompleted() {

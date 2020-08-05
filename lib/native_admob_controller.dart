@@ -50,10 +50,11 @@ class NativeAdmobController {
   }
 
   /// Change the ad unit ID
-  void setAdUnitID(String adUnitID) {
+  void setAdUnitID(String adUnitID, { int numberAds = 1 }) {
     _adUnitID = adUnitID;
     _channel.invokeMethod("setAdUnitID", {
       "adUnitID": adUnitID,
+      "numberAds": numberAds
     });
   }
 
@@ -67,11 +68,12 @@ class NativeAdmobController {
   /// Reload new ad with specific native ad id
   ///
   ///  * [forceRefresh], force reload a new ad or using cache ad
-  void reloadAd({bool forceRefresh = false}) {
+  void reloadAd({bool forceRefresh = false, int numberAds = 1}) {
     if (_adUnitID == null) return;
 
     _channel.invokeMethod("reloadAd", {
       "forceRefresh": forceRefresh,
+      "numberAds": numberAds
     });
   }
 

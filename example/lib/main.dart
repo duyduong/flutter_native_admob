@@ -102,6 +102,11 @@ class _MyAppState extends State<MyApp> {
                 type: NativeAdmobType.full,
               ),
             ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20.0),
+              height: 200.0,
+              color: Colors.blue,
+            ),
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(

@@ -284,7 +284,9 @@ private extension NativeAdView {
     
     func updateOptions() {
         adMediaView.isHidden = !options.showMediaContent
-        
+
+        backgroundColor = options.backgroundColor
+
         adLabelLbl.textColor = options.adLabelTextStyle.color
         adLabelLbl.font = UIFont.systemFont(ofSize: options.adLabelTextStyle.fontSize)
         adLabelView.backgroundColor = options.adLabelTextStyle.backgroundColor ?? .fromHex("FFCC66")

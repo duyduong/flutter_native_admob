@@ -31,6 +31,7 @@ class NativeTextStyle(
 class NativeAdmobOptions(
     var showMediaContent: Boolean = true,
     var ratingColor: Int = Color.YELLOW,
+    var backgroundColor: Int = Color.TRANSPARENT,
     val adLabelTextStyle: NativeTextStyle = NativeTextStyle(12f, Color.WHITE, Color.parseColor("#FFCC66")),
     val headlineTextStyle: NativeTextStyle = NativeTextStyle(16f, Color.BLACK),
     val advertiserTextStyle: NativeTextStyle = NativeTextStyle(14f, Color.BLACK),
@@ -46,6 +47,10 @@ class NativeAdmobOptions(
 
       (data["showMediaContent"] as? Boolean)?.let {
         bannerOptions.showMediaContent = it
+      }
+
+      (data["backgroundColor"] as? String)?.let {
+        bannerOptions.backgroundColor = Color.parseColor(it)
       }
 
       (data["ratingColor"] as? String)?.let {

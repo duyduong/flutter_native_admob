@@ -35,8 +35,9 @@ struct NativeAdmobOptions {
     }
     
     var showMediaContent: Bool = true
+    var backgroundColor: UIColor?
     var ratingColor: UIColor = .yellow
-    
+
     var adLabelTextStyle = NativeTextStyle(fontSize: 12, color: .white, backgroundColor: .fromHex("FFCC66"))
     var headlineTextStyle = NativeTextStyle(fontSize: 16, color: .black)
     var advertiserTextStyle = NativeTextStyle(fontSize: 14, color: .black)
@@ -50,6 +51,11 @@ struct NativeAdmobOptions {
     init(_ data: [String: Any]) {
         if let showMediaContent = data["showMediaContent"] as? Bool {
             self.showMediaContent = showMediaContent
+        }
+
+
+        if let backgroundColorString = data["backgroundColor"] as? String {
+            backgroundColor = .fromHex(backgroundColorString)
         }
         
         if let ratingColorString = data["ratingColor"] as? String {

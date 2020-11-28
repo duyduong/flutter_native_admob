@@ -1,6 +1,7 @@
 package com.nover.flutternativeadmob
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.util.AttributeSet
@@ -142,6 +143,8 @@ class NativeAdView @JvmOverloads constructor(
   }
 
   private fun updateOptions() {
+    adView.setBackgroundColor(options.backgroundColor)
+
     adMedia?.visibility = if (options.showMediaContent) View.VISIBLE else View.GONE
 
     ratingBar.progressDrawable

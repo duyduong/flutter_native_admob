@@ -43,3 +43,7 @@ Add setNonPersonalizedAds() to NativeAdmobController
 ## 2.1.0+3
 
 Allow to set number of ads when calling loadAds on NativeAdmobController
+
+## 2.2.0
+
+Null Safety support

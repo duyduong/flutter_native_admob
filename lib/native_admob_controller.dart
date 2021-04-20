@@ -16,8 +16,8 @@ class NativeAdmobController {
   final _pluginChannel = const MethodChannel("flutter_native_admob");
 
   /// Channel to communicate with controller
-  MethodChannel _channel;
-  String _adUnitID;
+  late MethodChannel _channel;
+  String? _adUnitID;
 
   NativeAdmobController() {
     _channel = MethodChannel(id);
@@ -79,7 +79,7 @@ class NativeAdmobController {
     });
   }
 
-  void setTestDeviceIds(List<String> ids) {
+  void setTestDeviceIds(List<String>? ids) {
     if (ids == null || ids.isEmpty) return;
 
     _pluginChannel.invokeMethod("setTestDeviceIds", {

@@ -1,17 +1,14 @@
 package com.nover.flutternativeadmob
 
 import android.content.Context
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import com.google.android.gms.ads.formats.MediaView
-import com.google.android.gms.ads.formats.UnifiedNativeAd
-import com.google.android.gms.ads.formats.UnifiedNativeAdView
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdView
 
 enum class NativeAdmobType {
   full, banner
@@ -30,11 +27,11 @@ class NativeAdView @JvmOverloads constructor(
       updateOptions()
     }
 
-  private val adView: UnifiedNativeAdView
+  private val adView: NativeAdView
 
   private val ratingBar: RatingBar
 
-  private val adMedia: MediaView?
+  private var adMedia: com.google.android.gms.ads.nativead.MediaView?
 
   private val adHeadline: TextView
   private val adAdvertiser: TextView
@@ -89,7 +86,7 @@ class NativeAdView @JvmOverloads constructor(
     adView.advertiserView = adAdvertiser
   }
 
-  fun setNativeAd(nativeAd: UnifiedNativeAd?) {
+  fun setNativeAd(nativeAd: NativeAd?) {
     if (nativeAd == null) return
 
     // Some assets are guaranteed to be in every UnifiedNativeAd.

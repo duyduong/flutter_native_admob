@@ -7,7 +7,7 @@ class NativeTextStyle(
     var fontSize: Float,
     var color: Int,
     var backgroundColor: Int? = null,
-    var visibility: Int = View.VISIBLE
+    var visibility: Int = View.VISIBLE,
 ) {
   fun update(data: HashMap<*, *>) {
     (data["fontSize"] as? Float)?.let {

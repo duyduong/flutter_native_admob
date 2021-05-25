@@ -7,7 +7,8 @@ import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.formats.UnifiedNativeAd
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.nativead.NativeAd
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -26,8 +27,8 @@ class NativeAdmobController(
     loading, loadError, loadCompleted
   }
 
-  var nativeAdChanged: ((UnifiedNativeAd?) -> Unit)? = null
-  var nativeAd: UnifiedNativeAd? = null
+  var nativeAdChanged: ((NativeAd?) -> Unit)? = null
+  var nativeAd: NativeAd? = null
     set(value) {
       field = value
       invokeLoadCompleted()
@@ -50,11 +51,11 @@ class NativeAdmobController(
 
           if (adLoader == null || isChanged) {
             val builder = AdLoader.Builder(context, it)
-            adLoader = builder.forUnifiedNativeAd { nativeAd ->
+            adLoader = builder.forNativeAd { nativeAd ->
               this.nativeAd = nativeAd
             }.withAdListener(object : AdListener() {
-              override fun onAdFailedToLoad(errorCode: Int) {
-                println("onAdFailedToLoad errorCode = $errorCode")
+              override fun onAdFailedToLoad(error: LoadAdError) {
+                println("onAdFailedToLoad errorCode = ${error.code}")
                 channel.invokeMethod(LoadState.loadError.toString(), null)
               }
             }).build()

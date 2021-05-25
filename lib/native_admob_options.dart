@@ -2,20 +2,28 @@ import 'package:flutter/material.dart';
 
 class NativeTextStyle {
   final double? fontSize;
+  final String? androidTypeface;
+  final String? iosTypeface;
   final Color? color;
   final Color? backgroundColor;
   final bool isVisible;
 
   const NativeTextStyle({
     this.fontSize,
+    this.androidTypeface,
+    this.iosTypeface,
     this.color,
     this.backgroundColor,
     this.isVisible = true,
   });
 
   Map<String, dynamic> toJson() => {
-        "backgroundColor": backgroundColor != null ? "#${backgroundColor!.value.toRadixString(16)}" : null,
+        "backgroundColor": backgroundColor != null
+            ? "#${backgroundColor!.value.toRadixString(16)}"
+            : null,
         "fontSize": fontSize,
+        "androidTypeface": androidTypeface,
+        "iosTypeface": iosTypeface,
         "color": color != null ? "#${color!.value.toRadixString(16)}" : null,
         "isVisible": isVisible,
       };
@@ -72,7 +80,9 @@ class NativeAdmobOptions {
   Map<String, dynamic> toJson() => {
         "showMediaContent": this.showMediaContent,
         "ratingColor": "#${ratingColor.value.toRadixString(16)}",
-        "backgroundColor": backgroundColor != null ? "#${backgroundColor!.value.toRadixString(16)}" : null,
+        "backgroundColor": backgroundColor != null
+            ? "#${backgroundColor!.value.toRadixString(16)}"
+            : null,
         "adLabelTextStyle": adLabelTextStyle.toJson(),
         "headlineTextStyle": headlineTextStyle.toJson(),
         "advertiserTextStyle": advertiserTextStyle.toJson(),

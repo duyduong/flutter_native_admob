@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_native_admob/native_admob_options.dart';
 
 void main() => runApp(MyApp());
 
@@ -48,6 +49,24 @@ class _MyAppState extends State<MyApp> {
                 numberAds: 3,
                 controller: _nativeAdController,
                 type: NativeAdmobType.banner,
+                options: NativeAdmobOptions(
+                  headlineTextStyle: NativeTextStyle(
+                    androidTypeface: 'fonts/Raleway-SemiBold.ttf',
+                    iosTypeface: 'Raleway-SemiBold',
+                  ),
+                  advertiserTextStyle: NativeTextStyle(
+                    androidTypeface: 'fonts/Raleway-SemiBold.ttf',
+                    iosTypeface: 'Raleway-SemiBold',
+                  ),
+                  callToActionStyle: NativeTextStyle(
+                    androidTypeface: 'fonts/Raleway-SemiBold.ttf',
+                    iosTypeface: 'Raleway-SemiBold',
+                  ),
+                  storeTextStyle: NativeTextStyle(
+                    androidTypeface: 'fonts/Raleway-SemiBold.ttf',
+                    iosTypeface: 'Raleway-SemiBold',
+                  ),
+                ),
               ),
             ),
             Container(

@@ -22,8 +22,8 @@ class NativeAdmobController: NSObject {
     let id: String
     let channel: FlutterMethodChannel
     
-    var nativeAdChanged: ((GADUnifiedNativeAd?) -> Void)?
-    var nativeAd: GADUnifiedNativeAd? {
+    var nativeAdChanged: ((GADNativeAd?) -> Void)?
+    var nativeAd: GADNativeAd? {
         didSet { invokeLoadCompleted() }
     }
     
@@ -59,7 +59,7 @@ class NativeAdmobController: NSObject {
                 adLoader = GADAdLoader(
                     adUnitID: adUnitID, 
                     rootViewController: nil, 
-                    adTypes: [.unifiedNative], 
+                    adTypes: [.native],
                     options: [multipleAdsOptions]
                 )
                 adLoader?.delegate = self
@@ -105,14 +105,14 @@ class NativeAdmobController: NSObject {
     }
 }
 
-extension NativeAdmobController: GADUnifiedNativeAdLoaderDelegate {
+extension NativeAdmobController: GADNativeAdLoaderDelegate {
     
-    func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: GADRequestError) {
+    func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: Error) {
         print("NativeAdmob: failed to load with error: \(error.localizedDescription)")
         channel.invokeMethod(LoadState.loadError.rawValue, arguments: nil)
     }
     
-    func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADUnifiedNativeAd) {
+    func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADNativeAd) {
         self.nativeAd = nativeAd
     }
 }

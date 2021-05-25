@@ -1,15 +1,22 @@
 package com.nover.flutternativeadmob
 
 import android.graphics.Color
+import android.graphics.Typeface
+import android.util.Log
 import android.view.View
+import kotlin.coroutines.coroutineContext
 
 class NativeTextStyle(
     var fontSize: Float,
     var color: Int,
     var backgroundColor: Int? = null,
-    var visibility: Int = View.VISIBLE
+    var visibility: Int = View.VISIBLE,
+    var androidTypeface: String? = null
 ) {
   fun update(data: HashMap<*, *>) {
+
+    Log.d("PorcoIlClero", data.toString())
+
     (data["fontSize"] as? Float)?.let {
       fontSize = it
     }
@@ -24,6 +31,10 @@ class NativeTextStyle(
 
     (data["isVisible"] as? Boolean)?.let {
       visibility = if (it) View.VISIBLE else View.GONE
+    }
+
+    (data["androidTypeface"] as? String)?.let {
+      androidTypeface = it
     }
   }
 }

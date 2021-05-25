@@ -48,6 +48,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Raleway-SemiBold.ttf</string>
+	</array>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 </dict>

@@ -52,15 +52,19 @@ class _MyAppState extends State<MyApp> {
                 options: NativeAdmobOptions(
                   headlineTextStyle: NativeTextStyle(
                     androidTypeface: 'fonts/Raleway-SemiBold.ttf',
+                    iosTypeface: 'Raleway-SemiBold',
                   ),
                   advertiserTextStyle: NativeTextStyle(
                     androidTypeface: 'fonts/Raleway-SemiBold.ttf',
+                    iosTypeface: 'Raleway-SemiBold',
                   ),
                   callToActionStyle: NativeTextStyle(
                     androidTypeface: 'fonts/Raleway-SemiBold.ttf',
+                    iosTypeface: 'Raleway-SemiBold',
                   ),
                   storeTextStyle: NativeTextStyle(
                     androidTypeface: 'fonts/Raleway-SemiBold.ttf',
+                    iosTypeface: 'Raleway-SemiBold',
                   ),
                 ),
               ),

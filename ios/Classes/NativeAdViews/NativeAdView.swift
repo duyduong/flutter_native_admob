@@ -288,32 +288,68 @@ private extension NativeAdView {
         backgroundColor = options.backgroundColor
 
         adLabelLbl.textColor = options.adLabelTextStyle.color
-        adLabelLbl.font = UIFont.systemFont(ofSize: options.adLabelTextStyle.fontSize)
+        
+        if let typeface = options.adLabelTextStyle.iosTypeface,
+           let font = UIFont(name: typeface, size: options.adLabelTextStyle.fontSize) {
+            adLabelLbl.font = font
+        } else {
+            adLabelLbl.font = UIFont.systemFont(ofSize: options.adLabelTextStyle.fontSize)
+        }
         adLabelView.backgroundColor = options.adLabelTextStyle.backgroundColor ?? .fromHex("FFCC66")
         adLabelView.isHidden = !options.adLabelTextStyle.isVisible
         
+        if let typeface = options.headlineTextStyle.iosTypeface,
+           let font = UIFont(name: typeface, size: options.headlineTextStyle.fontSize) {
+            adHeadLineLbl.font = font
+        } else {
+            adHeadLineLbl.font = UIFont.systemFont(ofSize: options.headlineTextStyle.fontSize)
+        }
         adHeadLineLbl.textColor = options.headlineTextStyle.color
-        adHeadLineLbl.font = UIFont.systemFont(ofSize: options.headlineTextStyle.fontSize)
         adHeadLineLbl.isHidden = !options.headlineTextStyle.isVisible
         
+        if let typeface = options.advertiserTextStyle.iosTypeface,
+           let font = UIFont(name: typeface, size: options.advertiserTextStyle.fontSize) {
+            adAdvertiserLbl.font = font
+        } else {
+            adAdvertiserLbl.font = UIFont.systemFont(ofSize: options.advertiserTextStyle.fontSize)
+        }
         adAdvertiserLbl.textColor = options.advertiserTextStyle.color
-        adAdvertiserLbl.font = UIFont.systemFont(ofSize: options.advertiserTextStyle.fontSize)
         adAdvertiserLbl.isHidden = !options.advertiserTextStyle.isVisible
         
+        if let typeface = options.bodyTextStyle.iosTypeface,
+           let font = UIFont(name: typeface, size: options.bodyTextStyle.fontSize) {
+            adBodyLbl.font = font
+        } else {
+            adBodyLbl.font = UIFont.systemFont(ofSize: options.bodyTextStyle.fontSize)
+        }
         adBodyLbl.textColor = options.bodyTextStyle.color
-        adBodyLbl.font = UIFont.systemFont(ofSize: options.bodyTextStyle.fontSize)
         adBodyLbl.isHidden = !options.bodyTextStyle.isVisible
         
+        if let typeface = options.storeTextStyle.iosTypeface,
+           let font = UIFont(name: typeface, size: options.storeTextStyle.fontSize) {
+            adStoreLbl.font = font
+        } else {
+            adStoreLbl.font = UIFont.systemFont(ofSize: options.storeTextStyle.fontSize)
+        }
         adStoreLbl.textColor = options.storeTextStyle.color
-        adStoreLbl.font = UIFont.systemFont(ofSize: options.storeTextStyle.fontSize)
         adStoreLbl.isHidden = !options.storeTextStyle.isVisible
         
+        if let typeface = options.priceTextStyle.iosTypeface,
+           let font = UIFont(name: typeface, size: options.priceTextStyle.fontSize) {
+            adPriceLbl.font = font
+        } else {
+            adPriceLbl.font = UIFont.systemFont(ofSize: options.priceTextStyle.fontSize)
+        }
         adPriceLbl.textColor = options.priceTextStyle.color
-        adPriceLbl.font = UIFont.systemFont(ofSize: options.priceTextStyle.fontSize)
         adPriceLbl.isHidden = !options.priceTextStyle.isVisible
         
+        if let typeface = options.callToActionStyle.iosTypeface,
+           let font = UIFont(name: typeface, size: options.callToActionStyle.fontSize) {
+            callToActionBtn.titleLabel?.font = font
+        } else {
+            callToActionBtn.titleLabel?.font = UIFont.systemFont(ofSize: options.callToActionStyle.fontSize)
+        }
         callToActionBtn.setTitleColor(options.callToActionStyle.color, for: .normal)
-        callToActionBtn.titleLabel?.font = UIFont.systemFont(ofSize: options.callToActionStyle.fontSize)
         if let bgColor = options.callToActionStyle.backgroundColor {
             callToActionBtn.setBackgroundImage(.from(color: bgColor), for: .normal)
         }

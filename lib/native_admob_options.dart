@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class NativeTextStyle {
   final double? fontSize;
   final String? androidTypeface;
+  final String? iosTypeface;
   final Color? color;
   final Color? backgroundColor;
   final bool isVisible;
@@ -10,6 +11,7 @@ class NativeTextStyle {
   const NativeTextStyle({
     this.fontSize,
     this.androidTypeface,
+    this.iosTypeface,
     this.color,
     this.backgroundColor,
     this.isVisible = true,
@@ -21,6 +23,7 @@ class NativeTextStyle {
             : null,
         "fontSize": fontSize,
         "androidTypeface": androidTypeface,
+        "iosTypeface": iosTypeface,
         "color": color != null ? "#${color!.value.toRadixString(16)}" : null,
         "isVisible": isVisible,
       };

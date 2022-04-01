@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_plugin_android_lifecycle: ^2.0.5
+
 flutter:
   plugin:
     androidPackage: com.nover.flutternativeadmob

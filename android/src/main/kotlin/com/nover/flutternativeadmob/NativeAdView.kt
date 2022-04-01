@@ -1,17 +1,15 @@
 package com.nover.flutternativeadmob
 
 import android.content.Context
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import com.google.android.gms.ads.formats.MediaView
-import com.google.android.gms.ads.formats.UnifiedNativeAd
-import com.google.android.gms.ads.formats.UnifiedNativeAdView
+import com.google.android.gms.ads.nativead.MediaView
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdView
 
 enum class NativeAdmobType {
   full, banner
@@ -30,7 +28,7 @@ class NativeAdView @JvmOverloads constructor(
       updateOptions()
     }
 
-  private val adView: UnifiedNativeAdView
+  private val adView: NativeAdView
 
   private val ratingBar: RatingBar
 
@@ -89,10 +87,10 @@ class NativeAdView @JvmOverloads constructor(
     adView.advertiserView = adAdvertiser
   }
 
-  fun setNativeAd(nativeAd: UnifiedNativeAd?) {
+  fun setNativeAd(nativeAd: NativeAd?) {
     if (nativeAd == null) return
 
-    // Some assets are guaranteed to be in every UnifiedNativeAd.
+    // Some assets are guaranteed to be in every NativeAd.
     adMedia?.setMediaContent(nativeAd.mediaContent)
     adMedia?.setImageScaleType(ImageView.ScaleType.FIT_CENTER)
 
@@ -100,7 +98,7 @@ class NativeAdView @JvmOverloads constructor(
     adBody?.text = nativeAd.body
     (adView.callToActionView as Button).text = nativeAd.callToAction
 
-    // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
+    // These assets aren't guaranteed to be in every NativeAd, so it's important to
     // check before trying to display them.
     val icon = nativeAd.icon
 

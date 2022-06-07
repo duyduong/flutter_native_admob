@@ -94,7 +94,7 @@ class NativePlatformView(
       type = NativeAdmobType.valueOf(it)
     }
 
-    view = NativeAdView(context, type)
+    view = NativeAdView(context!!, type)
 
     (map["controllerID"] as? String)?.let { id ->
       val controller = NativeAdmobControllerManager.getController(id)

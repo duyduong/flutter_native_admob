@@ -72,8 +72,8 @@ class FlutterNativeAdmobPlugin(
 
 class ViewFactory : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
-  override fun create(p0: Context?, p1: Int, p2: Any?): PlatformView {
-    return NativePlatformView(p0, id, p2)
+  override fun create(context: Context, id: Int, params: Any?): PlatformView {
+    return NativePlatformView(context, id, params)
   }
 }
 

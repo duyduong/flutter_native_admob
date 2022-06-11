@@ -72,13 +72,13 @@ class FlutterNativeAdmobPlugin(
 
 class ViewFactory : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
-  override fun create(context: Context, id: Int, params: Any?): PlatformView {
-    return NativePlatformView(context, id, params)
+  override fun create(p0: Context?, p1: Int, p2: Any?): PlatformView {
+    return NativePlatformView(p0, p1, p2)
   }
 }
 
 class NativePlatformView(
-    context: Context,
+    context: Context?,
     id: Int,
     params: Any?
 ) : PlatformView {
@@ -94,7 +94,7 @@ class NativePlatformView(
       type = NativeAdmobType.valueOf(it)
     }
 
-    view = NativeAdView(context, type)
+    view = NativeAdView(context!!, type)
 
     (map["controllerID"] as? String)?.let { id ->
       val controller = NativeAdmobControllerManager.getController(id)

@@ -12,7 +12,7 @@ enum NativeAdmobType: String {
     case banner, full
 }
 
-class NativeAdView: GADUnifiedNativeAdView {
+class NativeAdView: GADNativeAdView {
     
     let adLabelLbl: UILabel = {
         let label = UILabel()
@@ -113,7 +113,7 @@ class NativeAdView: GADUnifiedNativeAdView {
         fatalError("No support for interface builder")
     }
     
-    func setNativeAd(_ nativeAd: GADUnifiedNativeAd?) {
+    func setNativeAd(_ nativeAd: GADNativeAd?) {
         guard let nativeAd = nativeAd else { return }
         self.nativeAd = nativeAd
         

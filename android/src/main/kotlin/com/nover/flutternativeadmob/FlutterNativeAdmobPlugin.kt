@@ -5,8 +5,13 @@ import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.View
+import androidx.lifecycle.Lifecycle
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter;
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -18,14 +23,14 @@ import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 
 
-class FlutterNativeAdmobPlugin(
-    private val context: Context,
-    private val messenger: BinaryMessenger
-) : MethodCallHandler {
+class FlutterNativeAdmobPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware {
 
   enum class CallMethod {
     initController, disposeController, setTestDeviceIds
   }
+
+  private var lifecycle: Lifecycle? = null
+  private var binding: FlutterPlugin.FlutterPluginBinding? = null
 
   companion object {
 
@@ -36,7 +41,7 @@ class FlutterNativeAdmobPlugin(
       val messenger = registrar.messenger()
       val channel = MethodChannel(messenger, "flutter_native_admob")
 
-      val instance = FlutterNativeAdmobPlugin(registrar.context(), messenger)
+      val instance = FlutterNativeAdmobPlugin()
       channel.setMethodCallHandler(instance)
 
       // create platform view
@@ -50,7 +55,13 @@ class FlutterNativeAdmobPlugin(
     when (CallMethod.valueOf(call.method)) {
       CallMethod.initController -> {
         (call.argument<String>("controllerID"))?.let {
-          NativeAdmobControllerManager.createController(it, messenger, context)
+          binding?.let { b ->
+            NativeAdmobControllerManager.createController(
+                    it,
+                    b.binaryMessenger,
+                    b.applicationContext
+            )
+          }
         }
       }
 
@@ -67,6 +78,38 @@ class FlutterNativeAdmobPlugin(
         }
       }
     }
+  }
+
+  override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    this.binding = binding
+
+    val channel = MethodChannel(binding.binaryMessenger, "flutter_native_admob")
+
+    channel.setMethodCallHandler(this)
+
+    // create platform view
+    binding.platformViewRegistry
+            .registerViewFactory(viewType, ViewFactory())
+  }
+
+  override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+
+  }
+
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+    lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding)
+  }
+
+  override fun onDetachedFromActivityForConfigChanges() {
+    onDetachedFromActivity()
+  }
+
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+    onAttachedToActivity(binding)
+  }
+
+  override fun onDetachedFromActivity() {
+    lifecycle = null
   }
 }
 

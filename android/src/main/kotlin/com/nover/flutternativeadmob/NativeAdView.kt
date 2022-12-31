@@ -1,27 +1,28 @@
 package com.nover.flutternativeadmob
 
 import android.content.Context
-import android.content.res.Configuration
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import com.google.android.gms.ads.formats.MediaView
-import com.google.android.gms.ads.formats.UnifiedNativeAd
-import com.google.android.gms.ads.formats.UnifiedNativeAdView
+import com.google.android.gms.ads.nativead.MediaView
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdView
 
 enum class NativeAdmobType {
   full, banner
 }
 
 class NativeAdView @JvmOverloads constructor(
-    context: Context,
-    type: NativeAdmobType,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+  context: Context,
+  type: NativeAdmobType,
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
   var options = NativeAdmobOptions()
@@ -30,7 +31,7 @@ class NativeAdView @JvmOverloads constructor(
       updateOptions()
     }
 
-  private val adView: UnifiedNativeAdView
+  private val adView: NativeAdView
 
   private val ratingBar: RatingBar
 
@@ -89,26 +90,26 @@ class NativeAdView @JvmOverloads constructor(
     adView.advertiserView = adAdvertiser
   }
 
-  fun setNativeAd(nativeAd: UnifiedNativeAd?) {
+  fun setNativeAd(nativeAd: NativeAd?) {
     if (nativeAd == null) return
 
-    // Some assets are guaranteed to be in every UnifiedNativeAd.
-    adMedia?.setMediaContent(nativeAd.mediaContent)
+    // Some assets are guaranteed to be in every NativeAd.
+    adMedia?.mediaContent = nativeAd.mediaContent
     adMedia?.setImageScaleType(ImageView.ScaleType.FIT_CENTER)
 
     adHeadline.text = nativeAd.headline
     adBody?.text = nativeAd.body
     (adView.callToActionView as Button).text = nativeAd.callToAction
 
-    // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
+    // These assets aren't guaranteed to be in every NativeAd, so it's important to
     // check before trying to display them.
     val icon = nativeAd.icon
 
     if (icon == null) {
-      adView.iconView.visibility = View.GONE
+      adView.iconView?.visibility = View.GONE
     } else {
       (adView.iconView as ImageView).setImageDrawable(icon.drawable)
-      adView.iconView.visibility = View.VISIBLE
+      adView.iconView?.visibility = View.VISIBLE
     }
 
     if (nativeAd.price == null) {
@@ -125,10 +126,10 @@ class NativeAdView @JvmOverloads constructor(
     }
 
     if (nativeAd.starRating == null) {
-      adView.starRatingView.visibility = View.INVISIBLE
+      adView.starRatingView?.visibility = View.INVISIBLE
     } else {
       (adView.starRatingView as RatingBar).rating = nativeAd.starRating!!.toFloat()
-      adView.starRatingView.visibility = View.VISIBLE
+      adView.starRatingView?.visibility = View.VISIBLE
     }
 
     if (nativeAd.advertiser == null) {
@@ -147,8 +148,13 @@ class NativeAdView @JvmOverloads constructor(
 
     adMedia?.visibility = if (options.showMediaContent) View.VISIBLE else View.GONE
 
-    ratingBar.progressDrawable
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      ratingBar.progressDrawable.colorFilter =
+        BlendModeColorFilter(options.ratingColor, BlendMode.SRC_ATOP)
+    } else {
+      ratingBar.progressDrawable
         .setColorFilter(options.ratingColor, PorterDuff.Mode.SRC_ATOP)
+    }
 
     options.adLabelTextStyle.backgroundColor?.let {
       adAttribution.background = it.toRoundedColor(3f)

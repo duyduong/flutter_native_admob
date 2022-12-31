@@ -16,9 +16,9 @@ For help getting started with Flutter, view our online [documentation](http://fl
 ```s
 dependencies {
   // Example existing classpath
-  classpath 'com.android.tools.build:gradle:3.2.1'
+  classpath 'com.android.tools.build:gradle:7.2.2'
   // Add the google services classpath
-  classpath 'com.google.gms:google-services:4.3.0'
+  classpath 'com.google.gms:google-services:4.3.14'
 }
 ```
 

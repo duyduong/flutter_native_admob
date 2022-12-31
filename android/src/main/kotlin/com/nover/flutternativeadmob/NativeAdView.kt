@@ -1,8 +1,11 @@
 package com.nover.flutternativeadmob
 
 import android.content.Context
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +19,10 @@ enum class NativeAdmobType {
 }
 
 class NativeAdView @JvmOverloads constructor(
-    context: Context,
-    type: NativeAdmobType,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+  context: Context,
+  type: NativeAdmobType,
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
   var options = NativeAdmobOptions()
@@ -91,7 +94,7 @@ class NativeAdView @JvmOverloads constructor(
     if (nativeAd == null) return
 
     // Some assets are guaranteed to be in every NativeAd.
-    adMedia?.setMediaContent(nativeAd.mediaContent)
+    adMedia?.mediaContent = nativeAd.mediaContent
     adMedia?.setImageScaleType(ImageView.ScaleType.FIT_CENTER)
 
     adHeadline.text = nativeAd.headline
@@ -103,10 +106,10 @@ class NativeAdView @JvmOverloads constructor(
     val icon = nativeAd.icon
 
     if (icon == null) {
-      adView.iconView.visibility = View.GONE
+      adView.iconView?.visibility = View.GONE
     } else {
       (adView.iconView as ImageView).setImageDrawable(icon.drawable)
-      adView.iconView.visibility = View.VISIBLE
+      adView.iconView?.visibility = View.VISIBLE
     }
 
     if (nativeAd.price == null) {
@@ -123,10 +126,10 @@ class NativeAdView @JvmOverloads constructor(
     }
 
     if (nativeAd.starRating == null) {
-      adView.starRatingView.visibility = View.INVISIBLE
+      adView.starRatingView?.visibility = View.INVISIBLE
     } else {
       (adView.starRatingView as RatingBar).rating = nativeAd.starRating!!.toFloat()
-      adView.starRatingView.visibility = View.VISIBLE
+      adView.starRatingView?.visibility = View.VISIBLE
     }
 
     if (nativeAd.advertiser == null) {
@@ -145,8 +148,13 @@ class NativeAdView @JvmOverloads constructor(
 
     adMedia?.visibility = if (options.showMediaContent) View.VISIBLE else View.GONE
 
-    ratingBar.progressDrawable
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      ratingBar.progressDrawable.colorFilter =
+        BlendModeColorFilter(options.ratingColor, BlendMode.SRC_ATOP)
+    } else {
+      ratingBar.progressDrawable
         .setColorFilter(options.ratingColor, PorterDuff.Mode.SRC_ATOP)
+    }
 
     options.adLabelTextStyle.backgroundColor?.let {
       adAttribution.background = it.toRoundedColor(3f)
